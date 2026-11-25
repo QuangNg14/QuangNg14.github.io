@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f5ef">
+  <title>Quang Nguyen | Software engineer</title>
+  <meta name="description" content="Quang Nguyen's personal engineering portfolio. Explore experiments in distributed systems, AI evaluation, search and forecasting.">
+  <link rel="canonical" href="https://quangng14.github.io/">
+  <link rel="icon" type="image/svg+xml" href="mark.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body id="top">
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="bar wrap">
+    <a class="wordmark" href="#top" aria-label="Quang Nguyen, back to top"><img src="mark.svg" width="32" height="32" alt="">Quang Nguyen</a>
+    <nav aria-label="Primary"><a href="#work">Work</a><a href="#writing">Writing</a><a href="#about">About</a><a href="#contact">Contact</a></nav>
+  </header>
+  <main id="main" tabindex="-1">
+    <section class="cover wrap" aria-labelledby="name">
+      <div class="intro">
+        <h1 id="name">Quang<br>Nguyen<span>.</span></h1>
+        <p class="role">Software engineer at Microsoft.</p>
+        <p class="statement">I build small experiments to understand where systems break: a refund delivered twice, a worse answer hidden by an average, a forecast made too soon.</p>
+        <a class="arrow-link" href="#work">Explore my work <span aria-hidden="true">&#8595;</span></a>
+      </div>
+      <article class="experiment" id="payout">
+        <div class="plate-top"><span>Go / PostgreSQL</span><span>Local experiment</span></div>
+        <h2>Payout Replay</h2>
+        <figure>
+          <svg class="trace" viewBox="0 0 500 138" aria-hidden="true" focusable="false">
+            <g fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M34 34h126c42 0 44 35 84 35h218M34 104h126c42 0 44-35 84-35"/>
+              <circle cx="34" cy="34" r="7"/><circle cx="34" cy="104" r="7"/><path d="m452 60 10 9-10 9"/>
+            </g>
+            <g class="pulses"><circle cx="109" cy="34" r="5"/><circle cx="109" cy="104" r="5"/><circle cx="354" cy="69" r="6"/></g>
+          </svg>
+          <figcaption><span>Two workers</span><span>One recorded refund</span></figcaption>
+        </figure>
+        <p>Both workers received the same $20 refund. Even after a retry, the ledger recorded it once and still showed the $2 difference from the synthetic bank report.</p>
+        <a href="https://github.com/QuangNg14/payout-replay">Inspect the experiment <span aria-hidden="true">&#8599;</span></a>
+      </article>
+    </section>
+
+    <section id="work" class="section wrap" aria-labelledby="work-title">
+      <div class="section-head"><h2 id="work-title">Selected work</h2><p>Personal projects, built with synthetic data.</p></div>
+      <ul class="index">
+        <li><a href="#payout"><strong>Payout Replay</strong><span>Replay one refund without hiding a reconciliation error.</span><small>Go &middot; PostgreSQL</small><b aria-hidden="true">&#8593;</b></a></li>
+        <li><a href="https://github.com/QuangNg14/eval-workbench"><strong>Eval Workbench</strong><span>A five-case scripted ballot keeps regressions and abstentions visible.</span><small>Python &middot; Evaluation</small><b aria-hidden="true">&#8599;</b></a></li>
+        <li><a href="https://github.com/QuangNg14/posting-list-lab"><strong>Posting List Lab</strong><span>Compare a full scan with an index, without changing the ranked results.</span><small>C++17 &middot; Search</small><b aria-hidden="true">&#8599;</b></a></li>
+        <li><a href="https://github.com/QuangNg14/eventline-forecast"><strong>Eventline Forecast</strong><span>Predict next-hour demand using only events visible at forecast time.</span><small>Rust &middot; Python</small><b aria-hidden="true">&#8599;</b></a></li>
+        <li><a href="https://github.com/QuangNg14/clause-trace"><strong>Clause Trace</strong><span>Find the clause that was in force on a date, not just the newest amendment.</span><small>Python &middot; SQLite</small><b aria-hidden="true">&#8599;</b></a></li>
+      </ul>
+    </section>
+
+    <section id="writing" class="section wrap split" aria-labelledby="writing-title">
+      <div><h2 id="writing-title">Writing</h2><p class="aside-note">What the measurements do, and don't, establish.</p></div>
+      <div class="notes">
+        <article><h3><a href="https://github.com/QuangNg14/posting-list-lab/blob/main/docs/when-a-full-scan-beats-an-index.md">When a full scan beats an index <span aria-hidden="true">&#8599;</span></a></h3><p>On 12,000 synthetic documents, rare terms favored the index. One term appeared everywhere, and the scan beat it at both the median and the 95th percentile.</p></article>
+        <article><h3><a href="https://github.com/QuangNg14/posting-list-lab/tree/main/docs/tantivy">Comparing saved search timings <span aria-hidden="true">&#8599;</span></a></h3><p>Pairing 301 union queries shows why subtracting two engines' medians doesn't tell you the typical difference for the same query.</p></article>
+      </div>
+    </section>
+
+    <section id="about" class="section wrap split" aria-labelledby="about-title">
+      <div><h2 id="about-title">About</h2><p class="aside-note">I studied computer science at Rice University, with minors in Financial Computation and Modeling and Data Science. I also help students in the Vietnamese community navigate engineering internships.</p></div>
+      <dl class="history">
+        <div><dt>Microsoft</dt><dd>Software Engineer</dd><dd>Current</dd></div>
+        <div><dt>NVIDIA</dt><dd>Software Engineering Intern</dd><dd>2023</dd></div>
+        <div><dt>Meta</dt><dd>Software Engineering Intern</dd><dd>2022</dd></div>
+        <div><dt>Rice University</dt><dd>BS, Computer Science</dd><dd>Education</dd></div>
+      </dl>
+    </section>
+  </main>
+  <footer id="contact"><div class="wrap foot">
+    <div><h2>Get in touch<span>.</span></h2><p>For engineering opportunities or a conversation about the work.</p></div>
+    <nav aria-label="Contact"><a href="https://www.linkedin.com/in/quang1401/">LinkedIn <span aria-hidden="true">&#8599;</span></a><a href="https://github.com/QuangNg14">GitHub <span aria-hidden="true">&#8599;</span></a></nav>
+  </div></footer>
+</body>
+</html>
