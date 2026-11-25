@@ -3,10 +3,10 @@
 <body id="top"><a class="skip" href="#main">Skip to content</a><header class="frame mast">
   <a class="brand" href="/"><img src="/mark.svg" width="30" height="30" alt="">Quang Nguyen</a>
   <nav aria-label="Primary"><a href="/#work">Work</a><a href="/#community">Community</a><a href="/archive/" aria-current="page">Archive</a><a href="/resume/">Experience</a><a href="/#contact">Contact</a></nav>
-  <div class="theme" hidden><label for="theme">Theme</label> <select id="theme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></div>
+  <button class="theme" id="theme" type="button" hidden aria-label="Change color theme"><svg width="22" height="22" aria-hidden="true" focusable="false"><use href="/theme-icons.svg#system"></use></svg></button>
 </header>
 <main class="frame inner" id="main" tabindex="-1">
-  <header class="page-title"><h1>The archive<span>.</span></h1><p>Early software, notes from building it, and the career resources I make today. The dates below describe the original work, not current availability.</p><nav class="jumps" aria-label="Archive sections"><a href="#projects">Project archive ↓</a><a href="#writing-archive">TechBlog notes ↓</a><a href="#creator">Creator work ↓</a></nav></header>
+  <header class="page-title"><h1>The archive<span>.</span></h1><p>Early software, notes from building it, and the career resources I make today. The dates below describe the original work, not current availability.</p><nav class="jumps" aria-label="Archive sections"><a href="#projects">Project archive ↓</a><a href="#writing-archive">DecodeCraft posts ↓</a><a href="#creator">Creator work ↓</a></nav></header>
   <section class="archive-block" id="projects"><div class="section-head"><h2>Project archive</h2><a class="line-link" href="/#work">Current projects →</a></div>
     <div class="archive-plates">
       <figure><div class="plate-image"><a href="https://github.com/QuangNg14/LINK-Datathon" aria-label="View the Link project on GitHub"><img src="/images/link.webp" alt="Link's agency panel with recommended vendors and a similar agency" width="1000" height="627" loading="lazy" decoding="async"></a></div><figcaption><strong>Link · Rice Datathon</strong> The vendor recommendation interface I built for our team's 2021 project.</figcaption></figure>
@@ -30,25 +30,26 @@
       <article><small>Learning projects</small><h3><a href="https://github.com/QuangNg14/CodeBlog">MERN blog ↗</a> &amp; Firestore Todo</h3><p>Two small publishing and task-management apps made database writes visible all the way from a React form to the stored record.</p></article>
     </div>
   </section>
-  <section class="archive-block" id="writing-archive"><div class="section-head"><h2>TechBlog notes</h2><p>13 articles · 2020–2022</p></div><p class="section-desc">A reading index of my original DecodeCraft posts. Each entry opens a summary here; where a public project survives, the archive above links its source.</p>
-    <div class="reading-list">
-      <details id="MyProject"><summary><time datetime="2022-07-13">Jul 2022</time><strong>Quang Nguyen's Portfolio</strong></summary><p>A field guide to my early work, from Facebook Reels to a Flask site for a student organization. The archive above separates team contributions from independent projects.</p></details>
-      <details id="SWE-Internship"><summary><time datetime="2022-02-12">Feb 2022</time><strong>SWE Internship: Nailing the technical interviews</strong></summary><p>How I combined coursework, algorithm practice, mock interviews and a review of weak spots when preparing for internship interviews.</p></details>
-      <details id="AliasIntern"><summary><time datetime="2021-08-15">Aug 2021</time><strong>Intern at seed stage startup Alias</strong></summary><p>My first experience shipping features in a small startup: breaking work down, asking for feedback and understanding the creator behind the product.</p></details>
-      <details id="HatchMentor"><summary><time datetime="2021-08-09">Aug 2021</time><strong>Mentoring in Rice Apps OSA</strong></summary><p>How the Hatch mentors used guided exercises, live coding and office hours to help new contributors build a degree planner.</p></details>
-      <details id="Dashboard-App"><summary><time datetime="2021-06-20">Jun 2021</time><strong>Create and upload a mobile application to App Store and Google Play Store</strong></summary><p>A training route crosses foreground and background app states. This walkthrough follows location tracking, navigation, and the release process on both mobile platforms.</p></details>
-      <details id="LinkDatathon"><summary><time datetime="2021-02-15">Feb 2021</time><strong>Link: Rice University Datathon</strong></summary><p>How our team narrowed a transaction dataset to a vendor recommendation problem, then connected a Bayesian topic model to a usable interface.</p></details>
-      <details id="MessengerClone"><summary><time datetime="2021-02-01">Feb 2021</time><strong>Messenger Clone: Realtime Messaging Platform with Firebase</strong></summary><p>Following a friend request from pending to accepted, then keeping one-to-one and group conversations in sync with Firestore.</p></details>
-      <details id="TodoApp"><summary><time datetime="2020-12-01">Dec 2020</time><strong>CRUD Todo App with Firebase</strong></summary><p>A small React app to follow all four database operations: creating an item, reading a list, updating an item and deleting it.</p></details>
-      <details id="Heroku"><summary><time datetime="2020-10-18">Oct 2020</time><strong>Nodejs, Reactjs Heroku Deployment</strong></summary><p>A historical deployment walkthrough: build the React client, serve it through Node, and point the client at the deployed API. It describes the platform as it worked in 2020.</p></details>
-      <details id="Doctorally"><summary><time datetime="2020-10-18">Oct 2020</time><strong>Creating Doctorally: Online Supporting Platform</strong></summary><p>The frontend and backend choices behind a healthcare volunteer project: routing, authentication, shared state, and a map interface.</p></details>
-      <details id="Scholarship"><summary><time datetime="2020-04-09">Apr 2020</time><strong>How I got a scholarship at Rice Engineering Computer Science</strong></summary><p>My account of applying from Vietnam: choosing projects I cared about, writing school-specific essays, and presenting a coherent application. It isn't a formula for admission.</p></details>
-      <details id="CreateBlog"><summary><time datetime="2020-03-27">Mar 2020</time><strong>How to create a blog using M.E.R.N Stack</strong></summary><p>A post's journey from a React form through Redux to an Express API and MongoDB. Building the publishing tool gave me something concrete to write about.</p></details>
-      <details id="Intro"><summary><time datetime="2020-03-26">Mar 2020</time><strong>How I started coding...</strong></summary><p>The opening entry connects my mathematics background in Hanoi with the satisfaction of turning an idea into a working website.</p></details>
-    </div>
+  <section class="archive-block" id="writing-archive"><div class="section-head"><h2>DecodeCraft posts</h2><p>13 articles · 2020–2022</p></div><p class="section-desc">My original DecodeCraft posts, from my first coding journal to the projects I built at Rice. Dates, language, and examples reflect when I wrote them. Archive notes identify material withheld from this public edition.</p>
+    <ol class="reading-list">
+      <li id="MyProject"><a href="/MyProject/"><time datetime="2022-07-13">Jul 2022</time><strong>Quang Nguyen&#x27;s Portfolio</strong></a></li>
+      <li id="SWE-Internship"><a href="/SWE-Internship/"><time datetime="2022-02-12">Feb 2022</time><strong>SWE Internship: Nailing the technical interviews</strong></a></li>
+      <li id="AliasIntern"><a href="/AliasIntern/"><time datetime="2021-08-15">Aug 2021</time><strong>Intern at seed stage startup Alias <small>(excerpts)</small></strong></a></li>
+      <li id="HatchMentor"><a href="/HatchMentor/"><time datetime="2021-08-09">Aug 2021</time><strong>Mentoring in Rice Apps OSA</strong></a></li>
+      <li id="Dashboard-App"><a href="/Dashboard-App/"><time datetime="2021-06-20">Jun 2021</time><strong>Create and upload a mobile application to App Store and Google Play Store</strong></a></li>
+      <li id="LinkDatathon"><a href="/LinkDatathon/"><time datetime="2021-02-15">Feb 2021</time><strong>Link - Rice University Datathon</strong></a></li>
+      <li id="MessengerClone"><a href="/MessengerClone/"><time datetime="2021-02-01">Feb 2021</time><strong>Messenger Clone - Realtime Messaging Platform with Firebase</strong></a></li>
+      <li id="TodoApp"><a href="/TodoApp/"><time datetime="2020-12-01">Dec 2020</time><strong>CRUD Todo App with Firebase</strong></a></li>
+      <li id="Heroku"><a href="/Heroku/"><time datetime="2020-10-18">Oct 2020</time><strong>Nodejs, Reactjs Heroku Deployment</strong></a></li>
+      <li id="Doctorally"><a href="/Doctorally/"><time datetime="2020-10-18">Oct 2020</time><strong>Creating Doctorally - Online Supporting Platform</strong></a></li>
+      <li id="Scholarship"><a href="/Scholarship/"><time datetime="2020-04-09">Apr 2020</time><strong>How I got a scholarship at Rice Engineering Computer Science</strong></a></li>
+      <li id="CreateBlog"><a href="/CreateBlog/"><time datetime="2020-03-27">Mar 2020</time><strong>How to create a blog using M.E.R.N Stack</strong></a></li>
+      <li id="Intro"><a href="/Intro/"><time datetime="2020-03-26">Mar 2020</time><strong>How I started coding ...</strong></a></li>
+    </ol>
   </section>
   <section class="archive-block" id="creator"><div class="section-head"><h2>Creator notebook</h2><a class="line-link" href="https://www.instagram.com/quang.nguyen.nh/">Instagram ↗</a></div>
     <p class="section-desc">I turn recurring mentorship questions into Vietnamese-language videos, ranked comparisons, and checklists. These examples span finding openings, choosing portfolio projects, and making a stronger case in an interview.</p>
+    <figure class="webinar"><a href="https://www.instagram.com/p/C9WS9ilB5kl/" aria-label="View the original July 2024 Pathwise webinar announcement"><img src="/images/pathwise-webinar-2024.webp" width="720" height="720" loading="lazy" decoding="async" alt="Pathwise webinar poster showing Quang in a green graduation stole"></a><figcaption><strong>Software Engineering: Trends and Future Directions</strong>Pathwise's July 2024 speaker announcement. <a href="https://www.instagram.com/p/C9WS9ilB5kl/">Original post ↗</a></figcaption></figure>
     <ul class="rows"><li><a href="https://www.instagram.com/reel/DfD9Aw5t_0X/"><strong>Seven job boards, ranked</strong><span>Where to look beyond a single crowded job board. This reel recorded 170,379 Instagram views by November 25, 2026.</span><small>Watch ↗</small></a></li>
       <li><a href="https://www.instagram.com/reel/Dfq__VvN-ey/"><strong>When a recruiter accepts your first number</strong><span>A concrete salary conversation and what to do before naming your range.</span><small>Watch ↗</small></a></li>
       <li><a href="https://www.instagram.com/reel/DfTmfEotCuj/"><strong>Seven résumé project types</strong><span>What a project can demonstrate beyond a list of languages and frameworks.</span><small>Watch ↗</small></a></li>
@@ -58,11 +59,4 @@
     </ul><div class="actions"><a class="line-link" href="https://www.tiktok.com/@nhatquang.career">TikTok ↗</a><a class="line-link" href="https://www.threads.net/@quang.nguyen.nh">Threads ↗</a><a class="line-link" href="https://beacons.ai/nhatquang.career">Resource hub ↗</a></div>
   </section>
 </main><footer><div class="frame foot"><strong>Quang Nguyen</strong><nav aria-label="Footer"><a href="/">Home</a><a href="/resume/">Experience</a><a href="/#contact">Contact</a><a href="#top">Back to top ↑</a></nav></div></footer>
-<script>
-function openLinkedNote() {
-  const note = document.getElementById(location.hash.slice(1));
-  if (note instanceof HTMLDetailsElement) note.open = true;
-}
-openLinkedNote();
-window.addEventListener('hashchange', openLinkedNote);
-</script></body></html>
+</body></html>

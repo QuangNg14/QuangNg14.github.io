@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>How to create a blog using M.E.R.N Stack | DecodeCraft</title><meta content="How to create a blog using M.E.R.N Stack. Quang Nguyen's DecodeCraft article from March 27, 2020." name="description"/><link href="https://quangng14.github.io/CreateBlog/" rel="canonical"/><link href="/mark.svg" rel="icon" type="image/svg+xml"/><script src="/theme.js"></script><link href="/style.css" rel="stylesheet"/></head>
+<body id="top"><a class="skip" href="#main">Skip to content</a><header class="frame mast">
+<a class="brand" href="/"><img alt="" height="30" src="/mark.svg" width="30"/>Quang Nguyen</a>
+<nav aria-label="Primary"><a href="/#work">Work</a><a href="/#community">Community</a><a href="/archive/">Archive</a><a href="/resume/">Experience</a><a href="/#contact">Contact</a></nav>
+<button aria-label="Change color theme" class="theme" hidden="" id="theme" type="button"><svg aria-hidden="true" focusable="false" height="22" width="22"><use href="/theme-icons.svg#system"></use></svg></button>
+</header>
+<main class="frame inner post" id="main" tabindex="-1"><article><header class="post-head"><a href="/archive/#writing-archive">← DecodeCraft archive</a><h1>How to create a blog using M.E.R.N Stack</h1><p>Quang Nguyen · <time datetime="2020-03-27">March 27, 2020</time></p><p class="edition">Archive note: Some original illustrations are not reproduced in this edition.</p></header><div class="post-body"><h2 id="this-is-going-to-be-the-first-technical-blog-that-i-write-and-it-is-going-to-be-super-long-but-very-helpful-stay-tuned">This is going to be the first technical blog that I write and it is going to be super long but very helpful. Stay tuned !!</h2>
+<h3 id="what-is-mern">What is M.E.R.N ?</h3>
+<p>This is a <strong>"stack"</strong>(combination) of different languages and technologies used to create a software or program. It is in short for MongoDB, Express, React, and Nodejs (Don't worry about these things yet I will explain them in just a moment)</p>
+<p>The <strong>M.E.R.N</strong> stack uses</p>
+<ul>
+<li><strong>MongoDB</strong> as our database, storing information</li>
+<li><strong>Express and NodeJS</strong> to build the server (backend) to our website</li>
+<li><strong>React</strong> as our client-side (frontend)</li>
+</ul>
+<h3 id="what-do-we-need-in-a-blog">What do we need in a blog ?</h3>
+<p>I believe there are <strong>3 major steps</strong> of creating a simple blog (I am just a beginner so dont judge me if I miss any parts)</p>
+<ol>
+<li>A CRUD (Create, Read, Update, Delete) function for your posts</li>
+<li>Craft and store your posts in a store</li>
+<li>Launch and maintain your blog !!</li>
+</ol>
+<h2 id="lets-get-to-creating-our-app">Let's get to creating our app !!</h2>
+<h3 id="1-create-a-react-application">1. Create a React application</h3>
+<p>Assume that you already have an editor (I prefer to use <strong>Visual Studio Code</strong>). Create a new folder to contain your app.</p>
+<p>You will need to install <a href="https://nodejs.org/en/download/">NodeJs</a> beforehand</p>
+<p>There is an alternative for running the React App instead of npm (Nodejs Package Manager) which is <a href="https://www.npmjs.com/package/yarn">Yarn</a> and I also prefer to use this.</p>
+<p>So I will create a new React App</p>
+<pre><code class="language-bash">yarn add create react-app (your app name)
+cd (your app name)
+yarn start
+</code></pre>
+<h3 id="2-install-necessary-dependencies">2. Install necessary dependencies</h3>
+<p>Dependencies are similar to library that can add additional features to your app and here we are going to install the following dependencies: <strong>react-router, react router-dom</strong></p>
+<p>In order to use react-router and react-router-dom, you need to import and inject a <strong>BrowserRouter</strong> in the <strong>index.js</strong> file such as below</p>
+<pre><code class="language-javascript">import { BrowserRouter } from "react-router-dom";
+ReactDOM.render(
+  &lt;BrowserRouter&gt;
+    &lt;Provider store={store}&gt;
+      &lt;App /&gt;
+    &lt;/Provider&gt;
+  &lt;/BrowserRouter&gt;,
+  document.getElementById("root")
+);
+</code></pre>
+<h2 id="now-we-start-crafting-our-react-application">Now we start crafting our React application</h2>
+<h3 id="creating-forms-for-crud-add-function">Creating forms for CRUD (Add function)</h3>
+<p>Handling Forms is probably the most important step in the frontend side. Here I will create 2 components which is <strong>AddPost</strong> to handle adding new posts and <strong>PostList</strong> to render all the posts we have. You should structure the folders so that you have a component folder to store all your components.</p>
+<p><img alt="Folder structure for the blog client and server" decoding="async" height="354" loading="lazy" src="./folderStructure.webp" width="237"/></p>
+<p>Below is the setup for my <strong>AddPost</strong> component. Here we will pass an <strong>addPost</strong> as a <strong>props</strong> which later we will pass the actual function to add new post from the main App component. This component will return a form that includes 3 inputs for 3 main values of a post which are <strong><em>title, headline and content</em></strong>.</p>
+<p>I also use the standard form handling which is setting a <strong>postInfo</strong> state that carries the attributes of the new post which are <strong><em>title, headline and content</em></strong>. Whenever an input is changing (when the user is entering information) the postInfo will receive that value and update the state.</p>
+<pre><code class="language-javascript">const AddPost = (props) =&gt; {
+  const {addPost} = props
+  // const id = useSelector((state) =&gt; state.ListPosts.length + 1)
+  const dispatch = useDispatch()
+
+  const [postInfo, setPostInfo] = useState({
+    // id: id,
+    title: "",
+    headline: "",
+    content: ""
+  })
+  const onSubmitHandler = (e) =&gt; {
+    e.preventDefault()
+    addPost(postInfo)
+    setPostInfo({
+      title:"",
+      headline:"",
+      content:""
+    })
+  }
+
+  return (
+    &lt;div&gt;
+      &lt;form onSubmit={onSubmitHandler}&gt;
+        &lt;input
+          type="text"
+          name="title"
+          placeholder="Enter title"
+          value={postInfo.title}
+          onChange={(e) =&gt; { setPostInfo({ ...postInfo, title: e.target.value }) }}
+        /&gt;
+       &lt;input
+          type="text"
+          name="headline"
+          placeholder="Enter headline"
+          value={postInfo.headline}
+          onChange={(e) =&gt; { setPostInfo({ ...postInfo, headline: e.target.value }) }}
+        /&gt;
+
+        &lt;input
+          type="text"
+          name="content"
+          placeholder="Enter content"
+          value={postInfo.content}
+          onChange={(e) =&gt; { setPostInfo({ ...postInfo, content: e.target.value }) }}
+        /&gt;
+        &lt;input type="submit" value="Submit"/&gt;
+
+      &lt;/form&gt;
+</code></pre>
+<p>So after the postInfo state receive all the updated information and we submit the form, it will triggered the function <strong>addPost</strong> with the information in <strong>postInfo</strong></p>
+<p>Therefore, outside the App.js file, we will return the <strong>AddPost</strong> component within the <strong>PostList</strong> component, receiving function <strong>addPost</strong> as props</p>
+<pre><code class="language-javascript">const PostLists = (props) =&gt; {
+  const addPost = (postInfo) =&gt;{
+    const newPost = postInfo
+    dispatch(actionCreators.addPostToServer(newPost))
+  }
+   return (
+    &lt;div&gt;
+      &lt;AddPost addPost={addPost}/&gt;
+    &lt;div&gt;
+}
+</code></pre>
+<p>So what is the <strong>dispatch</strong> in the image above. I will explain it below.</p>
+<h3 id="3-setting-up-the-redux-store">3. Setting up the Redux Store</h3>
+<p>Since state management is quite tiring between the components, I decided to use Redux and some advanced Redux including asynchronous functions. <strong><em>Therefore, I decided to keep all my posts as a ListPosts state in the Redux store</em></strong></p>
+<p>Traditionally, in the class based components, we usually have to set up complex things such as <strong>mapStateToProps, mapDispatchToProps, connect</strong>, ... to make redux work. However, React Hooks give us equivalent but handier way to handle redux. We will apply useSelector (mapStateToProps equivalent) and useDispatch (mapDispatchToProps).</p>
+<h4 id="1-setting-in-the-indexjs-file">1. Setting in the index.js file</h4>
+<p>This is quite a lot of work so I wouldnt come into too much detail in the post. First, we will need to install <strong>react-redux and redux</strong> dependencies. After that, we import <strong>createStore and Provider</strong> from react-redux. I recommend using an extra middleware (in my case, it is the <strong><em>logger</em></strong> function) (a function runs just before a <strong>state</strong> is changed) to monitor the state as we go along. Below is my complete setup for the index.js file without the imports</p>
+<pre><code class="language-javascript">const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const logger = (store) =&gt; {
+  return (next) =&gt; {
+    return (action) =&gt; {
+      console.log("[Middleware] Dispatching", action);
+      const result = next(action);
+      console.log("[Middleware] next state", store.getState());
+      return result;
+    };
+  };
+}; //middleware
+
+const store = createStore(
+  reducer,
+  composeEnhancers(applyMiddleware(logger, thunk))
+);
+
+ReactDOM.render(
+  &lt;BrowserRouter&gt;
+    &lt;Provider store={store}&gt;
+      &lt;App /&gt;
+    &lt;/Provider&gt;
+  &lt;/BrowserRouter&gt;,
+  document.getElementById("root")
+);
+</code></pre>
+<p>You can see that we wrap our App with 2 things the <strong>Provider</strong> with the store (for the redux store) and the <strong>BrowserRouter</strong> for the route usage in our app</p>
+<p>In our store, you add a middleware <strong>logger</strong> and a <strong>thunk</strong> (from redux thunk) in order to enable use using <strong>asynchronous</strong> code from the action folder of the Redux store later</p>
+<h4 id="2-setting-in-the-action-folder">2. Setting in the action folder</h4>
+<p>The action folders hold all the actions of a redux store (it is not recommended that you perform logic here). So we will define all of out actions in the action file such as create, read, update and delete</p>
+<p>Here is an example that I set up the create function in the action folder.</p>
+<pre><code class="language-javascript">export const ADD_POST = "ADD_POST";
+export const addPost = (newPost) =&gt; {
+  return {
+    type: ADD_POST,
+    newPost: newPost,
+  };
+};
+
+export const addPostToServer = (newPost) =&gt; {
+  return (dispatch) =&gt; {
+    Axios.post("http://localhost:5000/posts/add", newPost)
+      .then((res) =&gt; {
+        console.log("add to database success");
+        dispatch(addPost(newPost));
+      })
+      .catch((err) =&gt; {
+        console.log(err);
+      });
+  };
+};
+</code></pre>
+<p>The upper function addPost is used to add a new post to both the <strong>ListPosts</strong> state in the store and to the database in the server (which I will mention later)</p>
+<p>Usually we would only defined the actions the in the action folder. However, I am using a very cool <strong>dispatch</strong> technique that allows me to perform asynchronous functions in the action folder. What I am doing here is that I am using Axios to call api to my server (which I will show you how to set up later) and update the database of my newest post.</p>
+<h4 id="3-setting-the-reducer">3. Setting the reducer</h4>
+<p>This is probably the most <strong>important</strong> part of our Redux store. After receiving the action's definition and payload (additional information that comes with the action), it will perform all the actual functions here in the reducer (No asynchronous functions here)</p>
+<pre><code class="language-javascript">const initialState = {
+  ListPosts: [],
+  SearchList: [],
+  MailList: [],
+};
+const reducer = (state = initialState, action) =&gt; {
+  switch (action.type) {
+    case actionTypes.ADD_POST: {
+      return {
+        ...state,
+        ListPosts: state.ListPosts.concat(action.newPost),
+      };
+    }
+  }
+};
+</code></pre>
+<p>Inside the reducer, as I have mentioned before, I set a global state <strong>ListPosts</strong> to store all the posts that would be rendered to the screen.</p>
+<p>Every time the action <strong><em>add new Post</em></strong> is dispatched, it will execute the asynchronous functions in the action, updating the database and then it will go through the reducer, performing the action of adding a new post to the global state <strong>ListPosts</strong>. So here we update both the ListPosts state and the database. The image below should help you out a bit with this action flow :))</p>
+<p><img alt="Flow of an action through the React and Redux application" decoding="async" height="651" loading="lazy" src="./actionFlow.webp" width="1061"/></p>
+<p>There, we are pretty much done with the <strong>Add new post</strong> function in the client-side.</p>
+<h3 id="creating-a-server-for-the-website-using-nodejs-and-express">Creating a server for the website using Nodejs and Express</h3>
+<p>I will create another folder called backend in my project and a file <strong>server.js</strong> inside that folder. This file will hold all of my server for the website. The settings are right below:</p>
+<pre><code class="language-javascript">const express = require("express");
+const app = express();
+const bodyParser = require("body-parser");
+const cors = require("cors");
+
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+app.listen(5000, (err) =&gt; {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log("server start success");
+  }
+});
+</code></pre>
+<p>With all of the settings, our server is up and loaded at <strong>port 5000</strong> of our localhost. Which means that in a way or another, even though your website is not hosted yet, you are not running your app in your computer but on the <strong>internet</strong> now. Cool right !</p>
+<p>I will start the server using the code below</p>
+<pre><code class="language-javascript">node server.js
+</code></pre>
+<p>Our server is completed and now we are going to set up our <strong>MongoDB</strong> database and connect it to our server.</p>
+<h3 id="setting-up-the-database-using-mongodb-compass">Setting up the database using MongoDB Compass</h3>
+<p>You will have to install the latest stable version of <a href="https://robomongo.org/download">Robo3T</a> and <a href="https://www.mongodb.com/products/compass">MongoDB Compass</a> in order to setup the database. Once you have installed and set everything up, your database should look like this:</p>
+<p>Typically, your <strong>connection</strong> will be localhost:27017 so you will be able to create a new database inside the connection. I create my own database and named it <strong>"ListPostsBlog"</strong>. Inside the database, there will be different collections and each <strong>collection</strong> should serve its own purpose. For example, I will have a collection ListPostsForBlog where I will store all my posts as <strong>documents</strong> like below</p>
+<p>If you get here, it means that you have successfully set up the database and it is ready to use.</p>
+<h3 id="connecting-the-database-to-the-server">Connecting the database to the server</h3>
+<pre><code class="language-javascript">app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+  next();
+});
+
+mongoose.connect(
+  "mongodb://localhost/ListPostsBlog",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  },
+  (err) =&gt; {
+    if (err) console.log(err);
+    else console.log("DB connect success!");
+  }
+);
+</code></pre>
+<p>We use the <strong>app.use</strong> function to connect the <strong>backend</strong> side (which runs at localhost:5000) to our <strong>client</strong> side (which runs at localhost:3000). Then we use mongoose, an updated library developed from mongodb to connect to our database. Notice that the link <strong>'mongodb://localhost/ListPostsBlog'</strong> must be precise in terms of connection and database name. (my database name is ListPostsBlog)</p>
+<h3 id="structuring-mongodb">Structuring MongoDB</h3>
+<p>Since MongoDB is a database, it allows us to structure the data inside and assign them <strong>types</strong> and other attributes<br/>
+similar to Microsoft Access that I learnt in grade 12 (something I see as really valuable) but MongoDB is <strong>NoSQL</strong> type database.</p>
+<p>Below I construct my database for 3 main components of a blog using Schema (supported by Mongoose): title, headline and content (I assume...). This should be put in your model folder in your backend folder.</p>
+<pre><code class="language-javascript">const PostSchema = new Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  headline: {
+    type: String,
+    required: true,
+  },
+  content: {
+    type: String,
+    required: true,
+  },
+});
+
+module.exports = mongoose.model("Post", PostSchema);
+</code></pre>
+<p>This file will export a PostSchema (Post Attributes you can say) for each Post that I create. Thus, we can import this <strong>PostSchema</strong> to other files we are about to use.</p>
+<h3 id="setting-up-more-routers-to-call-api">Setting up more routers to call API</h3>
+<p>What is API ?</p>
+<p>API is in short for Application Programming Interface, which is a standard <strong>protocol</strong> that developers use to transfer information. Lets say if you are doing actions in a website, the server wont get all the <strong>"raw data"</strong> that you are changing but different APIs of get, post, put, delete, ... and then process the APIs and send you back responses(More can be found <a href="https://topdev.vn/blog/api-la-gi/">Here</a>)</p>
+<p>Since in our client-side React-app such as the <strong>add new post</strong> function above, we use Axios to call and post new data to our server.</p>
+<pre><code class="language-javascript">Axios.post("http://localhost:5000/posts/add", newPost)
+  .then((res) =&gt; {
+    console.log("add to database success");
+    dispatch(addPost(newPost));
+  })
+  .catch((err) =&gt; {
+    console.log(err);
+  });
+</code></pre>
+<p>Therefore, right now in the server, we have to write routers to catch and process those APIs. So we will write a new router for rendering all the posts (get function) and creating new post</p>
+<pre><code class="language-javascript">PostRouter.get("/", (req, res) =&gt; {
+  ListPosts.find((err, posts) =&gt; {
+    if (err) {
+      console.log(err);
+    } else {
+      res.json(posts);
+    }
+  });
+});
+
+PostRouter.post("/add", (req, res) =&gt; {
+  const post = new ListPosts(req.body);
+  post
+    .save()
+    .then((post) =&gt; {
+      res.status(200).json({ post: "Post added successfully" });
+    })
+    .catch((err) =&gt; {
+      res.status(400).send("unable to save to database");
+    });
+});
+</code></pre>
+<p>Here the <strong>ListPosts</strong> is extracted from the <strong>database</strong>.</p>
+<ul>
+<li>GET: the get-router is pretty simple, we will find in the database and render out all the data</li>
+<li>POST: the post-router always come with the information of the new post (remember when we <strong>dispatch</strong> addnewPost action, we send the newest postInfo as additional information). So we will get that information using <strong>req.body</strong> (body of the our request), create a new Post using the type in the PostSchema and upload it to the database.</li>
+</ul>
+<p>So we are done with the Post function (sounds really complex despite the simple click we do on websites everyday right :)) )</p>
+<h3 id="render-our-listposts-read-function">Render our ListPosts (Read function)</h3>
+<p>Here, we will render out all the posts in our global state ListPosts in the redux store. I will use the React Hook useEffect as a cleanup function, which is whenever the ListPosts state is changed, we will get the latest data from the database and pass it down to the ListPosts state.</p>
+<pre><code class="language-javascript">const listPost = useSelector((state) =&gt; state.ListPosts);
+
+const fetchData = async () =&gt; {
+  const response = await fetch("http://localhost:5000/posts");
+  const resJson = await response.json();
+  return resJson;
+};
+
+const listPost = useSelector((state) =&gt; state.ListPosts);
+const [invalidate, setInvalidate] = useState(true);
+const dispatch = useDispatch();
+useEffect(() =&gt; {
+  if (invalidate) {
+    fetchData()
+      .then((res) =&gt; {
+        dispatch(actionCreators.updateListPost(res));
+        // setListPost(res)
+        setInvalidate(false);
+      })
+      .catch((err) =&gt; {
+        console.log(err);
+      });
+  }
+}, [invalidate]);
+</code></pre>
+<p>Since the <strong>useEffect</strong> hook will run whenever the value in the array is changed (here is invalidate changes), it will automatically <strong>dispatch</strong> to the action updateListPost in the action and get the newest data from the database</p>
+<pre><code class="language-javascript">listPost.map((post, index) =&gt; {
+        return (
+          &lt;div&gt;
+          &lt;Link to={`/posts/${post._id}`}&gt;
+            &lt;Post
+              key={index + 1}
+              title={post.title}
+              headline={post.headline}
+            /&gt;
+          &lt;/Link&gt;
+          &lt;button onClick={() =&gt; deletePost(post, post._id)}&gt;Remove&lt;/button&gt;
+          &lt;UpdatePost index={index} post={post}/&gt;            {/*UPDATE POST*/}
+          &lt;/div&gt;
+</code></pre>
+<p>From there, we can easily render all the posts in the <strong>ListPosts state</strong> out to the screen easily using the map function. As you noticed, every time we <strong>render</strong> a post, we also add a <strong>delete button</strong> and a <strong>Update Component</strong> so that we can perform our delete and update functions.</p>
+<h3 id="delete-function">Delete Function</h3>
+<p>All delete function always go with the <strong>id</strong> of the post we are deleting. So when we click the button "DeletePost above", we will dispatch the action below.</p>
+<pre><code class="language-javascript">  const deletePost = (post, _id) =&gt; {
+    dispatch(actionCreators.deletePostFromServer(post, _id))
+  }
+
+  listPost.map((post, index) =&gt; {
+        return (
+          &lt;div&gt;
+          &lt;Link to={`/posts/${post._id}`}&gt;
+            &lt;Post
+              key={index + 1}
+              title={post.title}
+              headline={post.headline}
+            /&gt;
+          &lt;/Link&gt;
+          &lt;button onClick={() =&gt; deletePost(post, post._id)}&gt;Remove&lt;/button&gt;
+         &lt;/div&gt;
+
+</code></pre>
+<p>Again we are reaching to our Redux store, search for the action "DELETE_POST", <strong>delete</strong> the post from the database in our server and then go to our Reducer and <strong>update</strong> the new state for the ListPosts, just as we do with the add new Post function</p>
+<p>Here is my action folder:</p>
+<pre><code class="language-javascript">export const deletePost = (post, _id) =&gt; {
+  return {
+    type: DELETE_POST,
+    post: post,
+    _id: _id,
+  };
+};
+
+export const deletePostFromServer = (post, _id) =&gt; {
+  return (dispatch) =&gt; {
+    Axios.delete(`http://localhost:5000/posts/delete/${post._id}`)
+      .then((res) =&gt; {
+        dispatch(deletePost(post, _id));
+      })
+      .catch((err) =&gt; {
+        console.log(err);
+      });
+  };
+};
+</code></pre>
+<p>As you notice, we still use Axios to call API to our server and pass down the 2 things in the delete function the actual <strong>post</strong> (so that later in the reducer we can use it to get the id of the <strong>post</strong> in the reducer) and the <strong>_id</strong> which is the id the Mongodb database automatically <strong>generate</strong> for us.</p>
+<p>Now we have successfully delete it in the database, we will update the <strong>state</strong> of ListPosts inside the redux store in the reducer file.</p>
+<pre><code class="language-javascript">    case actionTypes.DELETE_POST:
+      {
+        const newListPost = state.ListPosts.filter((post)=&gt; post._id != action._id)
+        return{
+          ...state,
+          ListPosts: newListPost
+        }
+      }
+</code></pre>
+<p>We use the filter method and comparing the <strong>action</strong> (that will just passed down) id with the id from all the posts and remove the right post.</p>
+<h3 id="update-function">Update Function</h3>
+<p>This is the last main <strong>function</strong> of our app and to be honest it is a bit similar to how we do with the create function. We begin by creating an UpdatePost component</p>
+<pre><code class="language-javascript">const UpdatePost = (props) =&gt; {
+  const { post, index } = props
+  const dispatch = useDispatch()
+
+  const [postInfo, setPostInfo] = useState({
+    title: "",
+    headline: "",
+    content: ""
+  })
+
+  const onSubmitHandler = (e) =&gt; {
+    e.preventDefault()
+    const newPost = {
+      _id: post._id,
+      title: postInfo.title,
+      headline: postInfo.headline,
+      content: postInfo.content
+    }
+
+    Axios.post(`http://localhost:5000/posts/update/${newPost._id}`, postInfo)
+      .then((res) =&gt; {
+        console.log(res)
+      })
+      .catch((err) =&gt; {
+        console.log(err)
+      })
+    // dispatch(actionCreators.updatePostServer(newPost, index))
+    setPostInfo({
+      title: "",
+      headline: "",
+      content: ""
+    })
+  }
+
+  return (
+    &lt;div&gt;
+      &lt;form onSubmit={onSubmitHandler}&gt;
+        &lt;input
+          type="text"
+          name="title"
+          placeholder="Enter title"
+          value={postInfo.title}
+          onChange={(e) =&gt; { setPostInfo({ ...postInfo, title: e.target.value }) }}
+        /&gt;
+       &lt;input
+          type="text"
+          name="headline"
+          placeholder="Enter headline"
+          value={postInfo.headline}
+          onChange={(e) =&gt; { setPostInfo({ ...postInfo, headline: e.target.value }) }}
+        /&gt;
+
+        &lt;input
+          type="text"
+          name="content"
+          placeholder="Enter content"
+          value={postInfo.content}
+          onChange={(e) =&gt; { setPostInfo({ ...postInfo, content: e.target.value }) }}
+        /&gt;
+        &lt;input type="submit" value="UpdatePost" /&gt;
+
+      &lt;/form&gt;
+</code></pre>
+<p>You can see it is nearly identical to our add new <strong>post</strong> function. First we need to create 3 forms to handle the change of 3 main attributes of our post <strong>title, headline, and content</strong>.</p>
+<p>We will also set a <strong>postInfo</strong> state to contain the updated information in each post and whenever the input is changing (the user is entering new information), this state will be updated. Then we will store the <strong>postInfo</strong> information along with the <strong>_id</strong> from the <strong>post</strong> that we pass a props for the UpdatePost component in an object <strong>newPost</strong></p>
+<p>Finally, we use Axios to call to our API to post a new post to the exact id of the old post and we have updated it successfully.</p>
+<h3 id="additional-functions">Additional Functions</h3>
+<h4 id="search-form">Search Form</h4>
+<p>This is also a function that is used a lot when people are reading posts so I will show you how to add a search function in your app.</p>
+<p>The core of the <strong>search</strong> function is that we will create a form. After the user submits that form (pressing search), we will filter our global <strong>state</strong> ListPosts all the posts that have the titles that include the value of the form. After getting a filtered list, we will create another global state called <strong>SearchList</strong> to contain the new list. We must do this because if we filtered directly in the main ListPosts state, it will automatically <strong>remove</strong> your posts whenever you search them.</p>
+<p>So first in the Redux store, I will create another global state called SearchList</p>
+<pre><code class="language-javascript">const initialState = {
+  ListPosts: [],
+  SearchList: [],
+};
+</code></pre>
+<p>Now we will create a SearchForm component to store our search function.</p>
+<pre><code class="language-javascript">const SearchForm = (props) =&gt; {
+  const { searchPost } = props;
+  const [value, setValue] = useState("");
+  const [fireRedirect, setFireRedirect] = useState(false);
+  const dispatch = useDispatch();
+
+  // const useQuery = () =&gt; {
+  //   return new URLSearchParams(useLocation().search);
+  // };
+  // const query = useQuery();
+
+  const onSubmitHandler = (e) =&gt; {
+    e.preventDefault();
+    setFireRedirect(true);
+    searchPost(value);
+    // dispatch(actionCreators.searchPost(value))
+  };
+  return (
+    &lt;div&gt;
+      &lt;form onSubmit={onSubmitHandler}&gt;
+        &lt;input
+          type="text"
+          value={value}
+          onChange={(e) =&gt; setValue(e.target.value)}
+        /&gt;
+        &lt;button type="submit"&gt;Search&lt;/button&gt;
+      &lt;/form&gt;
+      {fireRedirect &amp;&amp; &lt;Redirect to={`/posts/?name=${value}`} /&gt;}
+      {/* &lt;button onClick={() =&gt; dispatch(actionCreators.clearSearchList())}&gt;Refresh&lt;/button&gt; */}
+    &lt;/div&gt;
+  );
+};
+</code></pre>
+<p>First, we still handle the forms in the standard way, creating a state that holds the value of the form and whenever the input is changing we will update the <strong>state</strong> with the corresponding value.</p>
+<p>We also set a function <strong>searchPost</strong> as a props of this component along with the new <strong>value</strong> that was just updated.</p>
+<p>So what does the <strong>fireRedirect</strong> do ?</p>
+<p>Well, this will help us redirect our page to the link "..../posts/?name=" similar to when we perform a <strong>query</strong> (search) on Google. For example if I <strong>searched</strong> "hello" on Google, I will be taken to the path "www.google.com/search?q=hello".</p>
+<p>So I will do just as usual, dispatch the <strong>action</strong> SEARCH_POST. Here is my action folder:</p>
+<pre><code class="language-javascript">export const searchPost = (value) =&gt; {
+  return {
+    type: SEARCH_POST,
+    value: value, //action payload dc gắn giá trị newPostListSearch
+  };
+};
+</code></pre>
+<p>In my reducer I will set my newly created global state SearchList as the filtered ListPosts.</p>
+<pre><code class="language-javascript">case actionTypes.SEARCH_POST:
+      {
+        const newPostListSearch = state.ListPosts.filter((post) =&gt; post.title.toLowerCase().includes(action.value.toLowerCase()))
+        return{
+          ...state,
+          SearchList: newPostListSearch
+        }
+      }
+</code></pre>
+<p>And so we are done with the <strong>search</strong> function</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>So we have officially done with our M.E.R.N stack app. If you want to look at the source code you can find it <a href="https://github.com/MRSNOO/PersonalBlog">Here</a>. It is a basic web and has no styling at all yet :)) so sorry for that.</p>
+<p><strong>This is the end of my first super long post, I hope you enjoyed it and learnt something new from it. Hope I can receive more support in the future !!</strong></p>
+</div><footer class="post-end"><a href="/archive/#writing-archive">Back to all 13 posts →</a></footer></article></main><footer><div class="frame foot"><strong>Quang Nguyen</strong><nav aria-label="Footer"><a href="/">Home</a><a href="/resume/">Experience</a><a href="/#contact">Contact</a><a href="#top">Back to top ↑</a></nav></div></footer>
+</body></html>

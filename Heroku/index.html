@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Nodejs, Reactjs Heroku Deployment | DecodeCraft</title><meta content="Nodejs, Reactjs Heroku Deployment. Quang Nguyen's DecodeCraft article from October 18, 2020." name="description"/><link href="https://quangng14.github.io/Heroku/" rel="canonical"/><link href="/mark.svg" rel="icon" type="image/svg+xml"/><script src="/theme.js"></script><link href="/style.css" rel="stylesheet"/></head>
+<body id="top"><a class="skip" href="#main">Skip to content</a><header class="frame mast">
+<a class="brand" href="/"><img alt="" height="30" src="/mark.svg" width="30"/>Quang Nguyen</a>
+<nav aria-label="Primary"><a href="/#work">Work</a><a href="/#community">Community</a><a href="/archive/">Archive</a><a href="/resume/">Experience</a><a href="/#contact">Contact</a></nav>
+<button aria-label="Change color theme" class="theme" hidden="" id="theme" type="button"><svg aria-hidden="true" focusable="false" height="22" width="22"><use href="/theme-icons.svg#system"></use></svg></button>
+</header>
+<main class="frame inner post" id="main" tabindex="-1"><article><header class="post-head"><a href="/archive/#writing-archive">← DecodeCraft archive</a><h1>Nodejs, Reactjs Heroku Deployment</h1><p>Quang Nguyen · <time datetime="2020-10-18">October 18, 2020</time></p><p class="edition">Archive note: The original database connection example uses placeholders here. The original Heroku demo is offline; its links are no longer active.</p></header><div class="post-body"><h2 id="here-in-this-blog-i-will-show-you-how-i-usually-deploy-a-website-with-server-using-heroku-hope-you-enjoy-it">Here in this blog, I will show you how I usually deploy a website with server using Heroku. Hope you enjoy it!</h2>
+<p>If you have a static website or website with functions only in the frontend deployment is not that difficult. There are 3 ways that I usually use.</p>
+<ol>
+<li>
+<p>Using the Git deployment in Github<br/>
+If you get in the Github setting page, you can scroll down to the Github Pages and publish your site directly from the whichever branch and folder you want.</p>
+</li>
+<li>
+<p>Using Heroku deployment<br/>
+You can check this <a href="https://devcenter.heroku.com/articles/git">article</a> to see how to deploy using heroku. You will need to push all of your files to a github and conenct the github to heroku</p>
+</li>
+<li>
+<p>Using Firebase hosting<br/>
+Again you can check this <a href="https://firebase.google.com/docs/hosting">article</a> to see how to host using firebase. You will need to build your app in a way such that it is compressed to only 1 index.js file.</p>
+</li>
+</ol>
+<h2 id="in-this-post-we-will-discuss-how-to-specifically-deploy-a-nodejs-reactjs-project-using-heroku">In this post, we will discuss how to specifically deploy a Nodejs, Reactjs project using Heroku.</h2>
+<h3 id="1-first-you-will-need-to-create-a-mongo-cloud-database">1. First you will need to create a Mongo Cloud Database</h3>
+<p>This is because if we use the normal local database, we will not be able to deploy our website so that others can access. You will also want to create a cluster and connect that cluster to your server. After finishing that, you will get something like this.</p>
+<p>{asset_img mongodb.png}</p>
+<p>This is how you connect the database to your server in your index.js file</p>
+<pre><code class="language-javascript">mongoose.connect(
+  "mongodb+srv://&lt;user&gt;:&lt;password&gt;@&lt;cluster&gt;/&lt;database&gt;",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  },
+  (err) =&gt; {
+    if (!err) {
+      console.log("DB connected!");
+    } else {
+      console.error(err);
+    }
+  }
+);
+</code></pre>
+<h3 id="2-login-to-heroku-and-create-a-new-app">2. Login to Heroku and create a new app</h3>
+<p>You will create a Heroku account and run the command "heroku login" in your terminal. Then you get into the Heroku website to create a new app in the pipeline.<br/>
+It should look like this:</p>
+<p>{asset_img heroku.png}</p>
+<h3 id="3-connect-github-to-heroku">3. Connect Github to heroku</h3>
+<p>Create a new github repository. Add the remote location to the <strong>server</strong> folder (the backend folder). Then inside the heroku deploy page, you can find the repository and connect to github</p>
+<h3 id="4-remember-to-change-your-api-domain-from-localhost5000-to-whatever-ourwebsite-link">4. remember to change your API domain from localhost:5000 to (whatever ourwebsite link)</h3>
+<p>This is obvious because the localhost is only in your computer so no other people can access it. This should be stored in a .env file. Originally it should be like this</p>
+<pre><code class="language-javascript">  REACT_APP_API_DOMAIN=http://localhost:5000/
+</code></pre>
+<p>So when you logged into the Heroku, get to the setting page and see the config part. You <strong>MUST</strong> add all the necessary .env values in the <strong>Config Vars</strong> part if you want your website to work.</p>
+<p>Now you can change your REACT_APP_API_DOMAIN to whatever your website link will be. Mine will be (https://doctorally-test.herokuapp.com/)</p>
+<h3 id="5-build-and-add-to-server">5. Build and add to server</h3>
+<p>Get into the client folder (the frontend) and run yarn build. It will produce a <strong>build</strong> folder that has all of your frontend materials. Cut and paste it into the <strong>server</strong> folder (the backend).</p>
+<p>Now basically our whole app is in the server folder. It will look like this:</p>
+<p>{asset_img folder.png}</p>
+<h3 id="6-add-path-finding-in-the-server-indexjs">6. Add path finding in the server index.js</h3>
+<p>We must add these 2 lines in order for the server to look exactly for the build folder we just added.</p>
+<pre><code class="language-javascript">app.use(express.static(path.join(__dirname, "build")));
+app.get("/*", (req, res) =&gt; {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+</code></pre>
+<p>Remember to use cors in order to call HTTP request from different pages:</p>
+<pre><code class="language-javascript">app.use(cors());
+</code></pre>
+<p>And now our server folder is set. We are ready to push and deploy</p>
+<h3 id="7-push-and-deploy">7. Push and deploy</h3>
+<p>Get into the server folder. Perform git add, git commit and git push to the github repository we have created earlier.</p>
+<p>And now we can get into the Heroku main page of our app. Get to the Deploy Page and deploy branch (usually master).</p>
+<p>Now congratulations your app is now up and running online !!</p>
+</div><footer class="post-end"><a href="/archive/#writing-archive">Back to all 13 posts →</a></footer></article></main><footer><div class="frame foot"><strong>Quang Nguyen</strong><nav aria-label="Footer"><a href="/">Home</a><a href="/resume/">Experience</a><a href="/#contact">Contact</a><a href="#top">Back to top ↑</a></nav></div></footer>
+</body></html>

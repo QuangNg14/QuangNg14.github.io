@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Create and upload a mobile application to App Store and Google Play Store | DecodeCraft</title><meta content="Create and upload a mobile application to App Store and Google Play Store. Quang Nguyen's DecodeCraft article from June 20, 2021." name="description"/><link href="https://quangng14.github.io/Dashboard-App/" rel="canonical"/><link href="/mark.svg" rel="icon" type="image/svg+xml"/><script src="/theme.js"></script><link href="/style.css" rel="stylesheet"/></head>
+<body id="top"><a class="skip" href="#main">Skip to content</a><header class="frame mast">
+<a class="brand" href="/"><img alt="" height="30" src="/mark.svg" width="30"/>Quang Nguyen</a>
+<nav aria-label="Primary"><a href="/#work">Work</a><a href="/#community">Community</a><a href="/archive/">Archive</a><a href="/resume/">Experience</a><a href="/#contact">Contact</a></nav>
+<button aria-label="Change color theme" class="theme" hidden="" id="theme" type="button"><svg aria-hidden="true" focusable="false" height="22" width="22"><use href="/theme-icons.svg#system"></use></svg></button>
+</header>
+<main class="frame inner post" id="main" tabindex="-1"><article><header class="post-head"><a href="/archive/#writing-archive">← DecodeCraft archive</a><h1>Create and upload a mobile application to App Store and Google Play Store</h1><p>Quang Nguyen · <time datetime="2021-06-20">June 20, 2021</time></p><p class="edition">Archive note: Some original illustrations are not reproduced in this edition.</p></header><div class="post-body"><p>It has been a while since I have written everything. I have some new projects since the winter and I will try to introduce to you guys some of the newest projects I have been working on since the spring semester.</p>
+<p>Right after the finals are over, I have the time to create my first mobile application called <strong>Dashboard: Track your training</strong> (Link <a href="https://linktr.ee/quangnguyen14">Here</a>) and upload it to Appstore and Google Play. It was quite a challenging time and I wanted to share to you some basics on how to do it and some lessons I learned from deploying my application.</p>
+<p>Here are the <strong>big parts</strong> that will be covered in this post. Notice that I will try not to go into too much details in this post because it will be super long. Instead, I will walk you through the tips, tricks and lessons I learned by a hard way when I was doing my app. If you want to take a look at the source code, feel free to see it <a href="https://github.com/QuangNg14/Dashboard-App">here</a></p>
+<ol>
+<li>Introductions</li>
+<li>Frontend</li>
+<li>Explaining the core feature: Location Tracking</li>
+<li>Backend</li>
+<li>Deploying to Appstore and Google Play Store</li>
+</ol>
+<h2 id="introductions">Introductions</h2>
+<h3 id="introductions-of-the-app">Introductions of the app</h3>
+<p><strong>Explaining the name</strong> Dashboard = Dash + board. This name comprises of 2 of the main features of the app. You can <strong>track</strong> your training routes, <strong>pin</strong> your favorite locations and share your selfies to a board (or your <strong>Feed</strong>). It is a free sports management app with a friendly UI design that accurately records your training routes while helping you pin locations at ease and share your achievements with the DASHBOARD network.</p>
+<h3 id="what-technologies-did-i-use">What technologies did I use?</h3>
+<ol>
+<li>
+<p><strong>Expo React Native</strong>. The front end of the app is built based on Expo React Native. It is really convenient and handy in handling the libraries. However, 1 downside is that we cannot control the native files and rely entirely on expo</p>
+</li>
+<li>
+<p><strong>Google Map API</strong>. One of the location features used Google Map API</p>
+</li>
+<li>
+<p><strong>Expo Location</strong>. This is the main library used for building the location tracking function</p>
+</li>
+<li>
+<p><strong>Cloudinary</strong>. This is used to store images uploaded to the app</p>
+</li>
+<li>
+<p><strong>MongoDB and Express</strong>. This is the combo for backend that I usually use to build fullstack apps</p>
+</li>
+<li>
+<p><strong>Google App engine</strong>. This is where I host my server</p>
+</li>
+</ol>
+<h2 id="frontend">Frontend</h2>
+<p>Now we will be entering the main part <strong>building</strong> the actual app. Here are the components of our app. I will split into 2 parts: <strong>the Side Screens</strong> and the <strong>core feature</strong> Location Tracking</p>
+<h3 id="side-screens">Side Screens</h3>
+<ol>
+<li>Explaining Navigation v5 of React Native</li>
+<li>Building Welcome and Authentication Screens</li>
+<li>Building Account Screen</li>
+</ol>
+<h4 id="explaining-navigation-v5-of-react-native">Explaining Navigation v5 of React Native</h4>
+<p>The core of every app is navigation. In the newest version of react navigation v5, there has been a lot of changes to the navigation. Below is the map of our navigation. As you can see, we start from the <strong>welcome screen</strong> and the <strong>login/signup screen</strong> if we are not authenticated. The login and signup screen will be a <strong>stack navigator</strong> to move back and forth.</p>
+<p>We will do a quick check to see if the user is authenticated. If they are not, they will be in the login, signup screen. If they are, they will be navigated to the <strong>Main screen</strong>.</p>
+<pre><code class="language-javascript">{
+  authState.userToken != null ? (
+    // &lt;HomeTabScreen/&gt;
+    &lt;Drawer.Navigator
+      initialRouteName="TrackCreate"
+      drawerContent={(props) =&gt; &lt;DrawerContainer {...props} /&gt;}
+    &gt;
+      &lt;Drawer.Screen name="TrackCreate" component={HomeTabScreen} /&gt;
+    &lt;/Drawer.Navigator&gt;
+  ) : (
+    &lt;AuthStackScreen /&gt;
+  );
+}
+</code></pre>
+<p><img alt="Navigation diagram for the app screens" decoding="async" height="977" loading="lazy" src="./navigator.webp" width="1340"/></p>
+<p>In the main screen, there will be a <strong>bottom tab navigator</strong>. This will help us navigate between 4 screens: Track Create, Track List, Feed and Account.</p>
+<ol>
+<li><strong>Track Create</strong>: after we finished recording a track, we will move to <strong>Track Custom Screen</strong> so we will need a stack navigator for these 2 screens</li>
+<li><strong>Track List</strong>: after we clicked on a track on the track list, we will move to the track details. Thus, we will also need a stack navigator for these 2 screens.</li>
+<li><strong>Feed and Account</strong> Screens stand by their own so we just need to add them to the Bottom Tab Navigator</li>
+</ol>
+<h5 id="quick-tip-how-to-customize-the-screen-header">Quick Tip: How to customize the screen header</h5>
+<p>You <strong>HAVE</strong> to transform your screen into a stack screen by itself to customize the screen header.</p>
+<pre><code class="language-javascript">&lt;HomeTab.Screen
+  name="Feed"
+  component={FeedCreateStackScreen}
+  options={{
+    title: "Feed",
+  }}
+/&gt;
+</code></pre>
+<p>Here I created the FeedCreateStackScreen for my Feed Screen to be able to customize my screen title.</p>
+<h4 id="building-welcome-and-loginsignup-screen">Building Welcome and Login/Signup Screen</h4>
+<p>Here is a look of the Login/Signup Screen:</p>
+<p><img alt="Dashboard sign-up form" decoding="async" height="1340" loading="lazy" src="./signup.webp" width="619"/></p>
+<p><strong>Notice</strong><br/>
+These screens have basic functions to authenticate. I have already written a post about authenticating using JWT token <a href="/MessengerClone/">Here</a>. However, we need to make sure that will use <strong>SafeAreaView and ScrollView</strong> to make it scrollable when the keyboard is opened (so that the keyboard doesnt cover the inputs)</p>
+<pre><code class="language-javascript">        &lt;SafeAreaView style={styles.container}&gt;
+            &lt;View&gt;
+                &lt;ScrollView
+                    showsVerticalScrollIndicator={false}
+                &gt;
+                ...
+</code></pre>
+<h4 id="building-account-screen">Building Account Screen</h4>
+<p>This is where the users can customize their profile. This screen has some basic features like changing avatar and viewing the personal information.</p>
+<p>Here it gets to a point where you will need to ask the users for <strong>permission</strong> to access their photos and cameras. This is the first permission we will need and luckily, we have <strong>expo-image-picker</strong> and <strong>expo-camera</strong> to help us. Below is how we usually request for permission to access the <strong>media library</strong> (photos) from the user in Expo.</p>
+<pre><code class="language-javascript">useEffect(() =&gt; {
+  (async () =&gt; {
+    if (Platform.OS !== "web") {
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== "granted") {
+        alert("Sorry, we need camera roll permissions to make this work!");
+      }
+    }
+  })();
+}, []);
+</code></pre>
+<p><strong>Notes</strong> we should set the quality to 0.1 or lower to reduce the loading time for our app. We should also set the <strong>base64</strong> equal to true to <strong>store</strong> the image later</p>
+<pre><code class="language-javascript">  const pickImage = async () =&gt; {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.1,
+      base64: true
+    })
+
+    if (result.cancelled) {
+      return
+    }
+</code></pre>
+<p>There are many ways to store your images but I choose to use <strong>Cloudinary</strong> because their free package is really nice. What Cloudinary does is that it will create an image based on your <strong>base64</strong> link and <strong>upload</strong> that to their storage. After that, you can save your <strong>profile image link</strong> to your database and get it down whenever you want.</p>
+<pre><code class="language-javascript">let base64Img = `data:image/jpg;base64,${result.base64}`;
+let data = {
+  file: base64Img,
+  upload_preset: "iqtz1hm2",
+};
+await fetch(CLOUDINARY_URL, {
+  body: JSON.stringify(data),
+  headers: {
+    "content-type": "application/json",
+  },
+  method: "POST",
+});
+</code></pre>
+<h2 id="explaining-the-core-feature-location-tracking">Explaining the core feature: Location Tracking</h2>
+<p>This is probably the most important feature of the app. Location Tracking is pretty complicated and I will break it down for you in some parts</p>
+<ol>
+<li>Updating time continuously</li>
+<li>Create a Track reducer to handle recording new tracks</li>
+<li>Foreground Location</li>
+<li>Background Location</li>
+<li>Displaying it on a Map</li>
+<li>Customize a Track after saving</li>
+<li>Posting it to Feed</li>
+</ol>
+<h3 id="updating-time-continuously">Updating time continuously</h3>
+<p>This is probably the easiest part. As you can see in most tracking app, there is a clock running <strong>continuously</strong>. I did this by having 3 <strong>states</strong>: hour, minute and second. When we start recording, we will increase second by 1 (every second) by using a <strong>setInterval</strong> function along with a <strong>useEffect</strong></p>
+<pre><code class="language-javascript">    useEffect(() =&gt; {
+        let interval = setTimeout(() =&gt; setSecond(second + 1), 1000)
+</code></pre>
+<p>Then, if the second state is &gt;= 60, it will be <strong>resetted</strong> to 0 and the minute state will be increased by 1. Similarly, if the minute state is &gt;= 60, it will be <strong>resetted</strong> to 0 and the hour state will be increased by 1.</p>
+<h3 id="create-a-location-context-to-handle-recording-new-tracks">Create a Location context to handle recording new tracks</h3>
+<p>This is where we handle all the functions that are related to handling recodring the Locations. This can include <strong>startRecording, stopRecording, and addLocation</strong>. These are 3 things that are most important to the app. Everytime the user clicks Record, we will change the state to startRecording. Similarly, if they click Cancel, we will cancel recording.</p>
+<p><strong>Important Notes</strong> When we are recording locations, we will add a new location (this is a combination of longitude, latitude, currentSpeed, accuracy level, ...) every second to our state using the <strong>addLocation</strong> function.</p>
+<pre><code class="language-javascript">const addLocation = (dispatch) =&gt; {
+  return (location, isRecording, speedLst) =&gt; {
+    dispatch({ type: "add_current_location", payload: location });
+    if (isRecording) {
+      dispatch({ type: "add_location", payload: location });
+      dispatch({ type: "add_speed", payload: location.coords.speed * 3.6 });
+      dispatch({
+        type: "add_current_speed",
+        payload: location.coords.speed * 3.6,
+      });
+    }
+  };
+};
+</code></pre>
+<p>This is how the recording look like:<br/>
+<img alt="Dashboard route recorder and workout statistics" decoding="async" height="1340" loading="lazy" src="./3.record.webp" width="754"/></p>
+<h3 id="foreground-location">Foreground Location</h3>
+<p>Foreground location means that recording the location while <strong>your phone is opened and you are opening the app</strong>. This might not be too useful for an app that tracks your location while you are training because when you are cycling or running, you might <strong>lock</strong> your phone or <strong>turn it off</strong>. However, we will still have to include this.</p>
+<pre><code class="language-javascript">    const startWatching = async () =&gt; {
+        try {
+            const { granted } = await requestPermissionsAsync();
+            if (!granted) {
+                throw new Error('Location permission not granted');
+            }
+            subscriber = await watchPositionAsync(
+                {
+                    accuracy: Accuracy.BestForNavigation,
+                    timeInterval: 3000,
+                    distanceInterval: 30,
+                },
+                callback
+            );
+</code></pre>
+<p>Here we will use a function that was given to us by the expo library. This is the <strong>watchPositionAsync</strong>. It will basically record your location every 3 seconds or you have travelled 30 meters. Therefore, the recording might be a bit <strong>inaccurate</strong> when you barely moved or sit still. Make sure that you must <strong>ASK FOR THE USER PERMISSION</strong> to use Foreground location</p>
+<h3 id="background-location">Background Location</h3>
+<p>Background location means that recording the location while <strong>your phone is not opened or your screen is locked</strong>. This is the most complicated part of this app and it took me days to set up. This is because both IOS and Android have very strict protocols for asking background locations.</p>
+<p>When we are using background location, we will need to <strong>ASK FOR USER PERMISSION</strong> again but this time when you switch the app to the background it will prompt something like either <strong>allow using location while using the app</strong> or <strong>always allow using location</strong></p>
+<pre><code class="language-javascript">  const startLocationTracking = React.useCallback(async () =&gt; {
+    let res = await Permissions.askAsync(Permissions.LOCATION);
+    if (res.status !== 'granted') {
+      console.log('Permission to access location was denied');
+    }
+    await Location.startLocationUpdatesAsync(LOCATION_TRACKING, {
+      accuracy: Location.Accuracy.BestForNavigation,
+      timeInterval: 3000, //update every second
+      distanceInterval: 50, //update every 10 meters,
+      foregroundService: {
+        notificationTitle: 'Using your location',
+        notificationBody: 'To turn off, go back to the app and switch something off.',
+      },
+      pausesUpdatesAutomatically: true
+    });
+</code></pre>
+<p>For the background location, we will use the <strong>startLocationUpdatesAsync</strong> from expo library. This will track the location every 3 seconds or you have travelled 50 meters.</p>
+<p><strong>Notes 1</strong>: For Android, you will need to have a <strong>modal</strong> or a <strong>pop-up</strong> to explain why you want to use the users' background location<br/>
+<strong>Notes 2</strong>: For Android, your app will need to have permission from Google Review to be able to see the background location functions<br/>
+<strong>Notes 3</strong>: For IOS, the pop up to ask for background location will be quite slow so in the first few tries it might not be up.</p>
+<p>There will be a lot more <strong>notes and tricks</strong> on background location in the parts later when we try to <strong>deploy</strong> it to App Store and Google Play Store</p>
+<h3 id="displaying-it-on-a-map">Displaying it on a Map</h3>
+<p>This is quite easy since we can take advantage of the react native maps. We can use the MapView component to display a map in both IOS maps and Google maps.</p>
+<pre><code class="language-javascript">        &lt;MapView
+          style={{ height: isRecording ? "50%" : "80%", flex: 1 }}
+          region={currentLocation &amp;&amp; {
+            ...currentLocation.coords,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
+          }}
+          showsUserLocation={true}
+          followsUserLocation={followsUserLocation}
+</code></pre>
+<p>Then we will use a <strong>Polyline Component</strong> also from react native maps to display our tracks on the screen. The locations variable here is our <strong>locations</strong> state. This is an array of small <strong>Location</strong> objects (with latitude, longitude, accuracy, ...) which I have explained above.</p>
+<pre><code class="language-javascript">&lt;PolylineComponent locations={locations} /&gt;
+</code></pre>
+<p>This is the screen where we are drawing the tracks on the map.<br/>
+<img alt="Dashboard route recorder and workout statistics" decoding="async" height="1340" loading="lazy" src="./3.record.webp" width="754"/></p>
+<h3 id="pin-a-location">Pin a location</h3>
+<p>This is the <strong>innovative</strong> part of the app when compare to other apps. When we travelled to a new place, you can pin the current location and the app will display immediately the current address to the screen. This uses <strong>Google Maps API</strong> to get the most accurate current address.</p>
+<pre><code class="language-javascript">const reverseGeocodeAPI = async (latlng) =&gt; {
+  const res = await axios.get(`${BASE_URL}?latlng=${latlng}&amp;key=${API_KEY}`);
+  return res.data.results[0].formatted_address;
+};
+</code></pre>
+<p>Specifically, we use the <strong>reverseGeocode</strong> API to achieve this functionality. In order to set up and use Google Maps API, you will first need a <strong>Google API key</strong>.</p>
+<ol>
+<li>
+<p>Go to Google Cloud Console and create 2 new API keys at the Credentials page: 1 for IOS and 1 for Android</p>
+</li>
+<li>
+<p>Restrict 1 key to Android App and the other to IOS app</p>
+</li>
+<li>
+<p>Enable the Google Maps SDK for both IOS and Android in the market page<br/>
+<img alt="The map SDK information page used in the tutorial" decoding="async" height="761" loading="lazy" src="./market.webp" width="1340"/></p>
+</li>
+</ol>
+<p>Now you have successfully set up the API keys and are ready to call the Google APIs</p>
+<h3 id="customize-a-track-after-saving">Customize a Track after saving</h3>
+<p>This is basically adding some information for the track before saving it, you can add name, type, descriptions and an <strong>image</strong> of your track. In order to upload image here, we once again need to <strong>ask for the users permission</strong> to access the media library and have to upload to <strong>Cloudinary</strong></p>
+<p><strong>Notice</strong>: because there will be a lot of inputs in this screen and you dont want the keyboard to <strong>cover</strong> your inputs, make sure to use <strong>KeyboardAvoidingView</strong> for IOS:</p>
+<pre><code class="language-javascript">    {Platform.OS === "ios" ? (
+      &lt;KeyboardAvoidingView style={{ flex: 1 }} behavior="padding"&gt;
+</code></pre>
+<p>And do this for Android:</p>
+<pre><code class="language-javascript">    &lt;KeyboardAvoidingView keyboardVerticalOffset={-1000} style={{ flex: 1 }}&gt;
+</code></pre>
+<h3 id="posting-it-to-feed">Posting it to Feed</h3>
+<p>The Feed screen is basically a <strong>social media screen</strong> where it will list out all the current posts and each post will have avatar, name, descriptions, image and <strong>like, comment and share</strong> sections like a normal Facebook post.</p>
+<p>This can be done by getting all the posts from the database and display it to the screen</p>
+<pre><code class="language-javascript">useEffect(() =&gt; {
+  fetchPosts();
+}, [isFocused]);
+
+useEffect(() =&gt; {
+  if (state) {
+    setSortedState(state.slice().sort((a, b) =&gt; b.createdAt - a.createdAt));
+  }
+}, [state]);
+</code></pre>
+<p>What I do in the second useEffect is that I sort the post in the order that <strong>newest</strong> posts are on top. I will explain more about the schema of each post and comment and like cause it will be quite <strong>complicated</strong></p>
+<h2 id="backend">Backend</h2>
+<h3 id="setting-up-express-and-some-libraries">Setting up Express and some libraries</h3>
+<p>In Express, we used some standard libraries such as express, bodyParser and mongoose (for handle MongoDB). To connect to MongoDB, I have already written a blog <a href="/Doctorally/">Here</a>. You guys can check it out.</p>
+<pre><code class="language-javascript">const express = require("express");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+</code></pre>
+<p><strong>Notice that</strong>, we use this config to extend our request data size:</p>
+<pre><code class="language-javascript">app.use(
+  express.urlencoded({
+    limit: "50mb",
+    parameterLimit: 100000,
+    extended: true,
+  })
+);
+</code></pre>
+<h3 id="explaining-the-routes">Explaining the routes</h3>
+<p>There are 3 types of routes:</p>
+<ol>
+<li><strong>Authentication</strong> Routes. This is the authentication router using JWT Token. It is really common and I will not mention it in details here</li>
+<li><strong>Track</strong> Routes. These are the routers that you will use to save your track details to MongoDB</li>
+</ol>
+<p>This is an example of how to use the track routes to find <strong>all</strong> tracks of a user</p>
+<pre><code class="language-javascript">router.get("/tracks", requireAuth, async (req, res) =&gt; {
+  const tracks = await Track.find({ userId: req.user._id });
+  res.send(tracks);
+});
+</code></pre>
+<ol start="3">
+<li><strong>Posts</strong> Routes. These are the routers to control the posts that are posted to the Feed. Below is an example of how to get a post with a <strong>specified id</strong>:</li>
+</ol>
+<pre><code class="language-javascript">router.get("/posts/:id", requireAuth, async (req, res) =&gt; {
+  const id = req.params.id;
+  const query = { _id: id };
+  const post = await Post.findOne(query);
+  try {
+    res.send(post);
+  } catch (err) {
+    return res.status(422).send({ error: err.message });
+  }
+});
+</code></pre>
+<h3 id="explaining-mongodb-schema">Explaining MongoDB Schema</h3>
+<p>In this part, I will explain in detail the schemas of each type of routes.</p>
+<h4 id="the-user-schema">The user schema:</h4>
+<p>The user schema consists of <strong>information</strong> like: email, password (encrypted), firstName, lastName, age, gender, image (link to avatar image)</p>
+<p><strong>Note 1</strong>: we can set the image (avatar link) of a default image before the users change their avatar<br/>
+<strong>Note 2</strong>: In the user model, we will add a method to help comparePassword so that when we login, the password will be compared with the <strong>encrypted</strong> password saved in the database</p>
+<pre><code class="language-javascript">userSchema.methods.comparePassword = function (candidatePassword) {
+  const user = this;
+
+  return new Promise((resolve, reject) =&gt; {
+    bcrypt.compare(candidatePassword, user.password, (err, isMatch) =&gt; {
+      if (err) {
+        return reject(err);
+      }
+
+      if (!isMatch) {
+        return reject(false);
+      }
+
+      resolve(true);
+    });
+  });
+};
+</code></pre>
+<h4 id="the-track-schema">The Track Schema</h4>
+<p>Here we need to understand the detailed information of each location that we saved. Each location we saved will be a <strong>POINT</strong> schema with information like current latitude, longitude, altitude, accuracy, ...</p>
+<pre><code class="language-javascript">const pointSchema = new mongoose.Schema({
+  timestamp: Number,
+  coords: {
+    latitude: Number,
+    longitude: Number,
+    altitude: Number,
+    accuracy: Number,
+    heading: Number,
+    speed: Number,
+  },
+});
+</code></pre>
+<p>Therefore, each track will be an <strong>list</strong> of consecutive <strong>points</strong> so a track schema will look like this:</p>
+<pre><code class="language-javascript">const trackSchema = new mongoose.Schema({
+    userId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    locations: [pointSchema],
+</code></pre>
+<p>Notice that we will also need a <strong>userId</strong> in each track. This will be a <strong>reference</strong> to the user table. This will help us keep track of whose track is this.</p>
+<h3 id="the-post-schema">The Post Schema</h3>
+<p>Each post will contain likes, comments, and a map of the track we saved. Therefore, we need <strong>userId</strong> as a reference of the user table to know whose post is this. We also need <strong>trackId</strong> as a reference of the track table to know what track is this. Lastly, we need the <strong>likes</strong> and <strong>comments</strong> schema to be lists of likeSchemas and commentSchemas.</p>
+<p>These are the likeSchema and commentSchema</p>
+<pre><code class="language-javascript">const commentSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+  username: String,
+  text: String,
+  avatar: String,
+});
+
+const likeSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+  username: String,
+  avatar: String,
+});
+</code></pre>
+<pre><code class="language-javascript">const postSchema = new mongoose.Schema({
+    userId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    },
+    trackId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Track'
+    },
+    likes: {
+        type: [likeSchema],
+        default: []
+    },
+    comments: {
+        type: [commentSchema],
+        default: []
+    },
+</code></pre>
+<p>This is basically how we create the <strong>postSchema</strong>.</p>
+<h3 id="host-server-on-google-app-engine">Host server on Google App Engine</h3>
+<p>In order to run your server on all machines, we need to host our server somewhere but I chose <strong>Google App Engine</strong>. You can use whatever service you like. Here is the quick recap of the steps that is in <a href="https://cloud.google.com/appengine/docs/standard/nodejs/quickstart">This official tutorial</a></p>
+<ol>
+<li>
+<p>Create an app on Google Cloud Console</p>
+</li>
+<li>
+<p>Register for the Google App Engine service to that app. Make sure to choose the region that is close to you</p>
+</li>
+<li>
+<p>Make sure that billing is enabled for your Cloud project (just use the trial version)</p>
+</li>
+<li>
+<p>Enable Cloud build API in the Market<br/>
+<img alt="Google Cloud registration form for a new Cloud Build API project" decoding="async" height="568" loading="lazy" src="./newapp3.webp" width="1080"/></p>
+</li>
+<li>
+<p><strong>IMPORTANT</strong>: In your server folder, go to package.json and change the <strong>"main" key</strong> to "server.js". This is because google app engine only takes server.js as the main file.</p>
+</li>
+</ol>
+<pre><code class="language-javascript">{
+  "name": "track-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "@expo/ngrok": "^2.4.3",
+    "aws-sdk": "^2.905.0",
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.16",
+    "multer": "^1.4.2",
+    "nodemon": "^2.0.7"
+  },
+</code></pre>
+<ol start="6">
+<li>
+<p>Change the name of your main file (in the directory) from <strong>index.js -&gt; server.js</strong>. Make sure to change all imports if necessary.</p>
+</li>
+<li>
+<p>Run gcloud app deploy and click yes if prompted</p>
+</li>
+<li>
+<p>After finished uploading, you are done. You can always check the logs if there is any error on the google cloud console -&gt; Logs</p>
+</li>
+</ol>
+<h2 id="testing-and-deploying-to-app-store-and-google-play-store">Testing and Deploying to App Store and Google Play Store</h2>
+<p>This is the most exhausting and frustrating part but you have to go through this the first time. It actually took me <strong>more time</strong> to deploy to 2 stores than doing code.</p>
+<h3 id="deploying-an-expo-app-to-app-store">Deploying an Expo App to App Store</h3>
+<p>I will walk you through the very <strong>detailed</strong> steps from beginning to seeing your app on <strong>App Store</strong></p>
+<ol>
+<li>Setting up app.json file</li>
+<li>Testing your app on Simulator and Custom Expo Go</li>
+<li>Build the app for IOS using the archive</li>
+<li>Register for Apple Development Program through Apple Developer App</li>
+<li>Create an app on App Store Connect</li>
+<li>Prepare screenshots and video records of your Application</li>
+<li>Test your app on TestFlight</li>
+<li>Submit your app for review and wait for approval</li>
+</ol>
+<h4 id="setting-up-appjson-file">Setting up app.json file</h4>
+<p><strong>Versions and Build Number</strong>: This is the file that all expo projects have. You will need to handle <strong>versioning</strong> and <strong>buildNumber</strong>. These seem difficult at first but it is actually really easy. Everytime you make changes and create a new build, you will increment your <strong>build number</strong> like from 1.1.5 -&gt; 1.1.6. And everytime, you have a huge change or you want to update a version that is on the App Store already, you will need to <strong>increase the version</strong> like from 1.1.0 -&gt; 1.2.0</p>
+<p><strong>Icon Image</strong> Here, you can set up your splash screen image (loading screen) or your customized icon.</p>
+<p><strong>ios file</strong>. This is the most important file for IOS App as you can see from the name. In here, you will need to add the <strong>PERMISSIONS YOU ASK FROM THE USERS</strong> in the <strong>infoPlist</strong> key. Since my app is using background location, foreground location, media library and camera, all of these <strong>configurations</strong> are required:</p>
+<pre><code class="language-json">      "infoPlist": {
+        "NSCameraUsageDescription": "Allow Dashboard to ...",
+        "NSLocationWhenInUseUsageDescription": "Allow Dashboard to ...",
+        "NSLocationAlwaysUsageDescription": "Allow Dashboard to ...",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Allow Dashboard to ...",
+        "NSPhotoLibraryUsageDescription": "Give Dashboard permission to ...",
+        "UIBackgroundModes": [
+          "location",
+          "fetch"
+        ]
+      },
+</code></pre>
+<p>In the string value, you must provide a <strong>detailed</strong> description of how you want to use the features you ask from the users. For example, "Allow Dashboard to access media library to upload avatar images". You should also add a config of your API key like this if you are using Google Maps.</p>
+<pre><code class="language-json">    "config":{
+    "googleMapsApiKey": "your api key"
+    }
+</code></pre>
+<h4 id="testing-your-app-on-simulator-and-custom-expo-go">Testing your app on Simulator and Custom Expo Go</h4>
+<p>Usually when builing your app, you would have already tested with some kind of simulators. To test an IOS App, it would be best to use <strong>Xcode Simulator</strong>. You can open Xcode and open the <strong>simulator</strong> from choose from navigation bar Window -&gt; Devices and Simulator. Remember that you can choose any type of Iphone you want to simulate. You will need multiple Iphones for taking the screenshots later.</p>
+<p>Another way to more accurately test it with Iphone is using the Custom Expo Go. You should consider following the instructions <a href="https://docs.expo.io/guides/adhoc-builds/">Here</a></p>
+<h4 id="build-the-app-for-ios-using-the-archive">Build the app for IOS using the archive</h4>
+<p>You need to build the iOS bundle that actually packages the code of your app. This is then deployed somewhere on the Expo servers. In order to do this run the code below. Detailed Instructions are at <a href="https://docs.expo.io/distribution/building-standalone-apps/">here</a></p>
+<pre><code class="language-javascript">    expo build:ios -t archive
+</code></pre>
+<p>This will initiate the build and you will wait for Expo to build your code to an ios package. When it is done, it will give you a link where you can download your an <strong>.ipa</strong> file then encompasses your code. <strong>KEEP THIS .IPA FILE</strong> this is basically your whole app.</p>
+<h4 id="register-for-apple-development-program-through-apple-developer-app">Register for Apple Development Program through Apple Developer App</h4>
+<p>You will need to sign up for the Apple Developer Program:</p>
+<ol>
+<li>Go to <a href="https://developer.apple.com/programs/">https://developer.apple.com/programs/</a> and sign in with your Apple ID</li>
+<li>Click on Enroll</li>
+<li>Fill out the information and pay the $99 fee</li>
+<li>Wait for 1-2 days for your order to be processed</li>
+</ol>
+<p>or you can download the Apple Developer app from App Store to your <strong>PHONE</strong>. And register for the Apple Developer Program from the Account Tab. <strong>Notice</strong> that the $99 will be deducted from your current logged in <strong>Apple ID</strong></p>
+<h4 id="create-an-app-on-app-store-connect">Create an app on App Store Connect</h4>
+<p>Go to <a href="https://appstoreconnect.apple.com">https://appstoreconnect.apple.com</a> after you have successfully signed up for the Apple Developer Program and sign in to your Apple ID</p>
+<p>Create a new app like in here:</p>
+<p><strong>Notice</strong>: THERE WILL BE AN ERROR HERE in the <strong>bundle id</strong>. The bundle id will be generated by the name and you will take that bundle ID and copy it into your app.json bundleId in IOS. However, it will not be activated right away you will get back into appstoreconnect and select from the dropdown and you will see your bundleId generated</p>
+<h4 id="prepare-screenshots-and-video-records-of-your-application">Prepare screenshots and video records of your Application</h4>
+<p>Preparing <strong>screenshots</strong> of your Application in 6.5 inch phones (1242 × 2688px) and 5.5 inch phones (1242 x 2208px). It would be best to use the Simulator and take the <strong>video recordings</strong> and screenshots from their. You will also need screenshots of your app in tablets 2nd and 3rd generations as well but it is okay if you use the 4th or the 5th generation in your Simulator</p>
+<h4 id="test-your-app-on-testflight">Test your app on TestFlight</h4>
+<p>Download the app Transporter from App Store to your Mac. Link <a href="https://apps.apple.com/us/app/transporter/id1450874784?mt=12">Here</a></p>
+<p>Remember the <strong>.ipa</strong> file that I told you to save. This <strong>.ipa</strong> file is really important. You can now drop the .ipa file into your transporter app and it will upload automatically to TestFlight on App Store Connect. <strong>REMEMBER</strong>, you will need a different build version for each upload. You <strong>CANNOT</strong> have 2 builds that have the same versions and the same build number.</p>
+<p>You can see the details in these 2 pictures below:</p>
+<h4 id="submit-your-app-for-review-and-wait-for-approval">Submit your app for review and wait for approval</h4>
+<p>When you have finished all the steps above, your app is ready to submit for review. It will take from 24-48 hours to complete. <strong>Notice</strong> that Apple will extensively check and test out your app. Therefore, you should make sure that your app follows these rules so that it will not be rejected by Apple. The link is <a href="https://developer.apple.com/app-store/review/">here</a></p>
+<h3 id="deploying-an-expo-app-to-google-play-store">Deploying an Expo App to Google Play Store</h3>
+<ol>
+<li>Setting up app.json file</li>
+<li>Testing your app on Android Emulator</li>
+<li>Build the .apk or .aab file for Android</li>
+<li>Register for Google Play Developer</li>
+<li>Create an app on Google Play</li>
+<li>Prepare screenshots and images of your Application</li>
+<li>Push your app through the testing stages and wait for review</li>
+</ol>
+<h4>Setting up app.json file</h4>
+<p>The app.json file is quite similar to ios. You will control your version like the build number from IOS using the <strong>versionCode</strong>. <strong>YOU HAVE TO SET YOUR API KEY</strong> if you are using google maps:</p>
+<pre><code class="language-json">    "config":{
+      "googleMaps":{
+        "apiKey": "your api key"
+      }
+    }
+</code></pre>
+<p><strong>android file</strong>. This is the most important file for Android App. In here, you will need to add the <strong>PERMISSIONS YOU ASK FROM THE USERS</strong> in the <strong>permissions</strong> key. Since my app is using background location, foreground location, media library and camera, all of these <strong>configurations</strong> are required. More info on setting up the file can be found <a href="https://docs.expo.io/versions/v41.0.0/config/app/#apikey-2">here</a></p>
+<pre><code class="language-json">    "permissions": [
+      "CAMERA",
+      "ACCESS_COARSE_LOCATION",
+      "ACCESS_FINE_LOCATION",
+      "READ_EXTERNAL_STORAGE",
+      "WRITE_EXTERNAL_STORAGE",
+      "ACCESS_BACKGROUND_LOCATION",
+      "FOREGROUND_SERVICE"
+    ],
+</code></pre>
+<h4 id="testing-your-app-on-android-emulator">Testing your app on Android Emulator</h4>
+<p>You should download the Android Studio (link: "<a href="https://developer.android.com/studio">https://developer.android.com/studio</a>") and use the <strong>Android Emulator</strong> in the AVD Manager. If you are using a Mac M1, you should consider using the Preview version 3 of the Android Emulator <a href="https://github.com/741g/android-emulator-m1-preview/releases">here</a></p>
+<p>You can also use an Android Phone and Download <strong>Expo Go</strong>. Then you can test your app like you did in the building stage</p>
+<h4 id="register-for-google-play-developer">Register for Google Play Developer</h4>
+<ol>
+<li>Go to <a href="https://play.google.com/console">https://play.google.com/console</a></li>
+<li>Register for the Google Play Developer using a Google Account</li>
+<li>Pay the $25 fee for the Program</li>
+<li>Upload your National Citizen ID to help Google verify</li>
+</ol>
+<h4 id="build-the-apk-or-aab-file-for-android">Build the .apk or .aab file for Android</h4>
+<p>After that, you can start the Expo build just like for IOS. When building for android you can choose to build APK (<strong>expo build:android -t apk</strong>) or Android App Bundle (<strong>expo build:android -t app-bundle</strong>). It is recommended that you use the App Bundle command. <strong>KEEP THIS .APK OR .AAB file</strong></p>
+<p>Then, go to your Google Play Console at <a href="https://play.google.com/console">https://play.google.com/console</a>. Create a new app with the same <strong>bundle id</strong> as your ios app.</p>
+<h4 id="testing-in-google-play-console">Testing in Google Play Console</h4>
+<p>There are some <strong>stages</strong> of testing in Google Play Console that you might find trouble understanding. You dont need to go through all the stages of testing even though you are recommended</p>
+<p>There are 6 stages (as I understand): Pre-registration -&gt; Internal Testing -&gt; Closed Testing -&gt; Open Testing -&gt; Production -&gt; Release.</p>
+<p>What you can do to test is that you will <strong>DROP or UPLOAD</strong> your .aab or .apk<br/>
+file that was generated before into the Google Play Console. This will create a release of your app. You can <strong>PROMOTE</strong> your release in the order of the 6 stages above. For example, you can <strong>promote</strong> internal testing to open testing<br/>
+Usually, I would just do Closed Testing and then Production.</p>
+<ol>
+<li>
+<p>Pre-registration: Check your app to see which devices it is suitable</p>
+</li>
+<li>
+<p>Internal and Closed Testing: Add some testers by email and send them a link to test out your app.</p>
+</li>
+<li>
+<p>Open Testing: Your app is basically up in the store for users from the countries you selected to join in and test</p>
+</li>
+<li>
+<p>Production and Release: Final stages before your app is reviewed and released</p>
+</li>
+</ol>
+<h4 id="prepare-screenshots-and-images-of-your-application">Prepare screenshots and images of your Application</h4>
+<p>You will need screenshots from an android device. You can just take the screenshots from your Emulator. You will also need a background image for your app. The size is specified on the Google Play Console</p>
+<h4 id="push-your-app-through-the-testing-stages-and-wait-for-review">Push your app through the testing stages and wait for review</h4>
+<p><strong>YOUR APP SETTINGS</strong>: can always be found in the <strong>Main Store Listing</strong> in the left tab of your Dashboard</p>
+<p><img alt="Store console navigation to the main store listing" decoding="async" height="1116" loading="lazy" src="./google2.webp" width="566"/></p>
+<p><strong>COMPLETE YOUR APP CONTENT PAGE</strong>: this page is super important because it has many policies related to ads, privacy policy and etc... This can be found here:</p>
+<p><img alt="Store console navigation to the app content policy page" decoding="async" height="792" loading="lazy" src="./google3.webp" width="524"/><br/>
+Your app will be reviewed by the Google Team and will be published in 2-3 days.</p>
+<h2 id="thank-you-for-reading-this-post-i-hope-this-post-provided-you-with-some-insights-on-how-to-build-and-deploy-a-mobile-application-see-you-guys-again-in-the-next-post">Thank you for reading this post. I hope this post provided you with some insights on how to build and deploy a mobile application. See you guys again in the next post !</h2>
+</div><footer class="post-end"><a href="/archive/#writing-archive">Back to all 13 posts →</a></footer></article></main><footer><div class="frame foot"><strong>Quang Nguyen</strong><nav aria-label="Footer"><a href="/">Home</a><a href="/resume/">Experience</a><a href="/#contact">Contact</a><a href="#top">Back to top ↑</a></nav></div></footer>
+</body></html>

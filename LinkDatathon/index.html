@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Link - Rice University Datathon | DecodeCraft</title><meta content="Link - Rice University Datathon. Quang Nguyen's DecodeCraft article from February 15, 2021." name="description"/><link href="https://quangng14.github.io/LinkDatathon/" rel="canonical"/><link href="/mark.svg" rel="icon" type="image/svg+xml"/><script src="/theme.js"></script><link href="/style.css" rel="stylesheet"/></head>
+<body id="top"><a class="skip" href="#main">Skip to content</a><header class="frame mast">
+<a class="brand" href="/"><img alt="" height="30" src="/mark.svg" width="30"/>Quang Nguyen</a>
+<nav aria-label="Primary"><a href="/#work">Work</a><a href="/#community">Community</a><a href="/archive/">Archive</a><a href="/resume/">Experience</a><a href="/#contact">Contact</a></nav>
+<button aria-label="Change color theme" class="theme" hidden="" id="theme" type="button"><svg aria-hidden="true" focusable="false" height="22" width="22"><use href="/theme-icons.svg#system"></use></svg></button>
+</header>
+<main class="frame inner post" id="main" tabindex="-1"><article><header class="post-head"><a href="/archive/#writing-archive">← DecodeCraft archive</a><h1>Link - Rice University Datathon</h1><p>Quang Nguyen · <time datetime="2021-02-15">February 15, 2021</time></p></header><div class="post-body"><h2 id="first-prize-in-billcom-track">First Prize in Bill.com Track</h2>
+<h3 id="link-is-a-vendor-recommendation-service-and-analytics-engine-for-agencies-built-using-bayesian-inference-created-to-help-you-find-the-best-common-vendors-that-agencies-like-yours-prefer-to-use">Link is a vendor recommendation service and analytics engine for agencies built using Bayesian inference, created to help you find the best common vendors that agencies like yours prefer to use.</h3>
+<p>Check out this <a href="https://devpost.com/software/link-ot1d9k?ref_content=contribution-prompt&amp;ref_feature=engagement&amp;ref_medium=email&amp;utm_campaign=contribution-prompt&amp;utm_content=contribution_reminder&amp;utm_medium=email&amp;utm_source=transactional#app-team">post</a> to learn about our amazing project</p>
+<p>This is an <strong>introduction</strong> of our project on Youtube:</p>
+<p><a href="https://www.youtube.com/watch?v=Wiz5L2lDhIQ">https://www.youtube.com/watch?v=Wiz5L2lDhIQ</a></p>
+<h3 id="feb-5-2021">Feb 5, 2021</h3>
+<p>I have just experienced the most intense and rewarding 24 hours hackathon. This is the second hackathon that I participated at Rice (the first one didn't go well ☹️). Because of the time difference of 12 hours, I had to wake up super early to search for teams. I had to compete with 2-3 other people to get into my team and it was worth it.</p>
+<hr/>
+<h3 id="first-6-hours">First 6 hours</h3>
+<p>In the Datathon, we got to choose between some topics from different companies but we were in disagreement of which topics should we choose. We spent 6 hours debating the ideas and I was already tired and frustrated. I felt really scared that my team wasn't able to put anything up. Our list of pros and cons of each idea is just super longg</p>
+<p>Finally, I proposed that we should continue with the transaction and financial data from <a href="http://bill.com">Bill.com</a> because it had the biggest dataset and we could do a lot of cool things with financial data. This is the best decision we made and we immediately assigned tasks to people and started working.</p>
+<hr/>
+<h3 id="our-idea-popped-out">Our idea popped out</h3>
+<p>Given the wealth of transaction data provided by <a href="http://bill.com/">Bill.com</a>, we sought to identify vendor-to-vendor, agency-to-agency, and agency-to-vendor relationships that could be used to identify similar agencies and vendors. Specifically, our goal was to identify a quantitative method of measuring similarity among vendors and agencies in order to make custom-tailored recommendations.</p>
+<hr/>
+<h3 id="what-it-does">What it does</h3>
+<p>Link is able to suggest vendors within similar industries given the vendors it most often interacts with. You can enter the name of an agency, and gain access to a variety of analytics, including customer spending habits, most suitable industry, and vendors the agency interacts with the most. Recommendations of other vendors are also provided, as well as similar agencies based on spending habits and industry preference.</p>
+<p>Here is a visual look of the web application I did. I created the website using Material UI styled components and ReactJS</p>
+<p><img alt="Link showing a selected agency and suggested vendors" decoding="async" height="636" loading="lazy" src="./web.webp" width="1340"/></p>
+<hr/>
+<h3 id="how-we-built-the-product">How we built the product</h3>
+<p>We establish similarities between vendors using Latent Dirichlet Allocation (LDA), which is a Bayesian bag-of-words approach to finding unifying topics for words. Each of the 450,000 transactions has a vendor with a list of descriptors, which we defined as its characteristics. Once we gathered and tokenized these characteristics for each vendor, we then ran it through our Bayesian model and concluded that the characteristics converged under six main topics, which we call industries. Our LDA model was able to slowly inch the characteristics’ probabilities for topics towards convergence, resulting in these characteristics, which is how we find similarities between vendors. We also performed some filtering and suggesting on the website.</p>
+<p><img alt="Notebook used in the team's vendor recommendation analysis" decoding="async" height="629" loading="lazy" src="./jupyter.webp" width="1340"/></p>
+<hr/>
+<h3 id="what-i-am-proud-of">What I am proud of</h3>
+<p>I was able to extract and clean the data to optimize it for Bayesian inference and LDA. This is a big dataset so it is challenging and time-consuming. However, I still provided cleaned excel files with the data</p>
+<p>I also created a user-friendly and interactive website to integrate everything we worked on and allow the companies to search and get insightful analytics.</p>
+<hr/>
+<h3 id="whats-next-for-link">What's next for Link</h3>
+<p>Given more time and resources, we’d want to iterate upon our model and improve it by feeding in more data and possibly exploring other models. We’d also want to continue to polish our interface so that agencies and vendors can better understand their analytics and make the most of our results.</p>
+<p>Thank you for reading this post. If you want to see the work we have done check out this <a href="https://github.com/QuangNg14/Datathon/tree/master">Github Page</a></p>
+</div><footer class="post-end"><a href="/archive/#writing-archive">Back to all 13 posts →</a></footer></article></main><footer><div class="frame foot"><strong>Quang Nguyen</strong><nav aria-label="Footer"><a href="/">Home</a><a href="/resume/">Experience</a><a href="/#contact">Contact</a><a href="#top">Back to top ↑</a></nav></div></footer>
+</body></html>
