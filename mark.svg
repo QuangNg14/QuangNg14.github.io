@@ -1,1 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect width="40" height="40" rx="5" fill="#113d32"/><g fill="none" stroke="#e2ff72" stroke-width="3" stroke-linecap="round"><path d="M7 11h6c6 0 6 9 13 9h7M7 29h6c6 0 6-9 13-9"/><path d="m28 15 5 5-5 5"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+  <style>
+    :root { color: #fff; }
+    rect { fill: #000; }
+    @media (prefers-color-scheme: dark) {
+      :root { color: #000; }
+      rect { fill: #fff; }
+    }
+  </style>
+  <rect width="40" height="40" rx="4"/>
+  <g fill="currentColor">
+    <path fill-rule="evenodd" d="M19 6.5c7.2 0 12.3 5.3 12.3 12.4S26.2 31.3 19 31.3 6.7 26 6.7 18.9 11.8 6.5 19 6.5Zm0 4.3c-4.2 0-7.1 3.4-7.1 8.1S14.8 27 19 27s7.1-3.4 7.1-8.1-2.9-8.1-7.1-8.1Z"/>
+    <path d="M19.5 21.5h5.6L35.6 33h-6.1z"/>
+  </g>
+</svg>

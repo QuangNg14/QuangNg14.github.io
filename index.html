@@ -2,20 +2,24 @@
 <html lang="en"><head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Quang Nguyen | Engineer, co-founder &amp; mentor</title>
-  <meta name="description" content="Quang Nguyen's work in cloud engineering, bilingual interview preparation, and career education. Projects, writing, and a career timeline.">
-  <link rel="canonical" href="https://quangng14.github.io/"><link rel="icon" href="/mark.svg" type="image/svg+xml"><link rel="stylesheet" href="/style.css">
+  <meta name="description" content="Quang Nguyen automates engineering workflows with AI agents and builds reliable data and release pipelines. Explore his engineering work, Pathwise products and mentorship.">
+  <link rel="canonical" href="https://quangng14.github.io/"><link rel="icon" href="/mark.svg" type="image/svg+xml"><script src="/theme.js"></script><link rel="stylesheet" href="/style.css">
 </head><body id="top">
 <a class="skip" href="#main">Skip to content</a>
-<header class="frame mast"><a class="brand" href="/" aria-label="Quang Nguyen, home"><img src="/mark.svg" width="30" height="30" alt="">Quang Nguyen</a><nav aria-label="Primary"><a href="#work">Work</a><a href="#community">Community</a><a href="/archive/">Archive</a><a href="/resume/">Résumé</a></nav></header>
+<header class="frame mast">
+  <a class="brand" href="/" aria-label="Quang Nguyen, home"><img src="/mark.svg" width="30" height="30" alt="">Quang Nguyen</a>
+  <nav aria-label="Primary"><a href="#work">Work</a><a href="#community">Community</a><a href="/archive/">Archive</a><a href="/resume/">Experience</a><a href="#contact">Contact</a></nav>
+  <div class="theme" hidden><label for="theme">Theme</label> <select id="theme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></div>
+</header>
 <main id="main" tabindex="-1">
   <section class="frame hero" aria-labelledby="name">
     <div class="hero-copy"><h1 id="name">Quang<br>Nguyen<span>.</span></h1>
       <p class="intro">Software engineer at Microsoft.<br>Co-founder of Pathwise Mentorship.</p>
-      <p class="summary">I work on cloud infrastructure and build tools for people preparing for their next job. Between the two, I write about what I learn, in English and Vietnamese.</p>
-      <div class="actions"><a class="button" href="#work">Selected work <span aria-hidden="true">↓</span></a><a class="line-link" href="/resume/">Career timeline</a></div>
+      <p class="summary">I automate engineering work with AI agents, evaluate them before release, and build reliable data pipelines for cloud services. Outside Microsoft, I build interview tools and teach in English and Vietnamese.</p>
+      <div class="actions"><a class="button" href="#work">Selected work <span aria-hidden="true">↓</span></a><a class="line-link" href="/resume/#practice">How I work</a></div>
     </div>
     <div class="atlas">
-      <a class="tile prep" href="#pathwise"><span class="tile-top">Pathwise Prep <b aria-hidden="true">↘</b></span><span class="letter-art" aria-hidden="true">EN<span>↔</span>VI</span><span class="tile-foot">Interview practice in two languages</span></a>
+      <figure class="portrait"><img src="/images/quang.webp" alt="Quang Nguyen seated at a café, holding a cup" width="640" height="853" fetchpriority="high"><figcaption>From my original TechBlog</figcaption></figure>
       <a class="tile replay" href="#payout"><span class="tile-top">Payout Replay <b aria-hidden="true">↘</b></span><span class="amount" aria-hidden="true">$2<span>.00</span></span><span class="tile-foot">The difference that should stay visible</span></a>
       <a class="tile studio" href="#community"><span class="tile-top">Creator studio <b aria-hidden="true">↘</b></span><span class="storyboard" aria-hidden="true"><i></i><i></i><i></i></span><span class="tile-foot">Career guides in Vietnamese</span></a>
     </div>
@@ -25,7 +29,8 @@
     <article class="feature" id="pathwise"><div class="feature-label"><span>Product</span><h3>Pathwise Prep</h3><small>Next.js / FastAPI / PostgreSQL</small></div>
       <div><p class="feature-blurb">An interview guide is more useful when you can rehearse the answer.</p>
         <p>I built a bilingual workspace where candidates can explore a company's interview rounds, practice out loud or in writing, check a résumé, and track applications. A content review step keeps raw submissions separate from the material learners see.</p>
-        <div class="actions"><a class="line-link" href="https://www.pathwiseprep.com/">Explore the beta ↗</a><a class="line-link" href="https://www.pathwiseprep.com/interview-questions">Browse company guides ↗</a></div></div>
+        <div class="actions"><a class="line-link" href="https://www.pathwiseprep.com/">Explore the beta ↗</a><a class="line-link" href="https://www.pathwiseprep.com/interview-questions">Browse company guides ↗</a></div>
+        <figure class="work-shot"><img src="/images/pathwise-prep.webp" width="1000" height="570" loading="lazy" decoding="async" alt="Pathwise Prep's public beta homepage with entry points for company questions, coding practice, and mock interviews"><figcaption>Pathwise Prep · Public beta, November 2026</figcaption></figure></div>
     </article>
     <article class="feature" id="payout"><div class="feature-label"><span>Systems experiment</span><h3>Payout Replay</h3><small>Go / PostgreSQL</small></div>
       <div><p class="feature-blurb">Two worker processes. One recorded refund.</p><p>Two workers handle the same $20 refund event in a synthetic settlement. A retry must not subtract it again. The ledger still reports $77 against a $75 bank report; silently making the numbers match would be the bug.</p><a class="line-link" href="https://github.com/QuangNg14/payout-replay">Read the experiment ↗</a></div>
@@ -49,7 +54,7 @@
     <ul class="rows"><li><a href="https://github.com/QuangNg14/posting-list-lab/blob/main/docs/when-a-full-scan-beats-an-index.md"><strong>When a full scan beats an index</strong><span>What identical rankings can teach you about two very different retrieval costs.</span><small>Case study ↗</small></a></li>
       <li><a href="https://github.com/QuangNg14/posting-list-lab/tree/main/docs/tantivy"><strong>Comparing saved search timings</strong><span>Why the difference between two engine medians is not the typical difference for one query.</span><small>Research note ↗</small></a></li></ul>
   </section>
-  <section class="frame section bio" id="about" aria-labelledby="about-title"><div><h2 id="about-title">Résumé &amp; recognition</h2><p>Microsoft, NVIDIA, Meta, and the Rice student teams where I learned to build with other people. My path began in mathematics in Vietnam and continued at Rice on a full-ride scholarship.</p></div><a class="button" href="/resume/">View the timeline →</a></section>
+  <section class="frame section bio" id="about" aria-labelledby="about-title"><div><h2 id="about-title">Experience &amp; recognition</h2><p>From mathematics in Vietnam and a full-ride scholarship at Rice to software engineering at Meta, NVIDIA, and Microsoft. My recent focus is giving agents useful tools and checking their work before it reaches users.</p></div><a class="button" href="/resume/">View the timeline →</a></section>
 </main>
-<footer id="contact"><div class="frame foot"><div><strong>Quang Nguyen</strong><p>Engineering, mentorship &amp; writing</p></div><nav aria-label="Contact"><a href="https://www.linkedin.com/in/quang1401/">LinkedIn ↗</a><a href="https://github.com/QuangNg14">GitHub ↗</a><a href="#top">Back to top ↑</a></nav></div></footer>
+<footer id="contact"><div class="frame foot"><div><h2>Get in touch</h2><p>For engineering opportunities, collaborations, or a conversation about the work.</p><a class="line-link" href="mailto:quangnnguyen.1401@gmail.com">quangnnguyen.1401@gmail.com</a></div><nav aria-label="Contact"><a href="https://www.linkedin.com/in/quang1401/">LinkedIn ↗</a><a href="https://github.com/QuangNg14">GitHub ↗</a><a href="https://www.thepathwise.org/">Mentorship ↗</a><a href="#top">Back to top ↑</a></nav></div></footer>
 </body></html>
