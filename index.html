@@ -21,7 +21,7 @@
       <div class="intro">
         <h1 id="name">Quang<br>Nguyen<span>.</span></h1>
         <p class="role">Software engineer at Microsoft.</p>
-        <p class="statement">I build small experiments to understand where systems break: a refund delivered twice, a worse answer hidden by an average, a forecast made too soon.</p>
+        <p class="statement">I build small experiments to understand where systems break: a retried refund event, a worse answer hidden by an average, a forecast made too soon.</p>
         <a class="arrow-link" href="#work">Explore my work <span aria-hidden="true">&#8595;</span></a>
       </div>
       <article class="experiment" id="payout">
@@ -35,9 +35,9 @@
             </g>
             <g class="pulses"><circle cx="109" cy="34" r="5"/><circle cx="109" cy="104" r="5"/><circle cx="354" cy="69" r="6"/></g>
           </svg>
-          <figcaption><span>Two workers</span><span>One recorded refund</span></figcaption>
+          <figcaption><span>Two worker processes</span><span>One recorded refund</span></figcaption>
         </figure>
-        <p>Both workers received the same $20 refund. Even after a retry, the ledger recorded it once and still showed the $2 difference from the synthetic bank report.</p>
+        <p>Two processes handled the same $20 refund event. Even after a retry, the ledger recorded one refund and still showed the $2 difference from the synthetic bank report.</p>
         <a href="https://github.com/QuangNg14/payout-replay">Inspect the experiment <span aria-hidden="true">&#8599;</span></a>
       </article>
     </section>
